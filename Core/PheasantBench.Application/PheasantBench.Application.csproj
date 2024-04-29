@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Abstractions\" />
+    <Folder Include="Constants\" />
+    <Folder Include="EventHandlers\Commands\" />
+    <Folder Include="EventHandlers\Queries\" />
+    <Folder Include="Dtos\" />
+    <Folder Include="RequestFeatures\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Desktop\Projects\Cascade\Shared\Application.Shared\Application.Shared.csproj" />
+    <ProjectReference Include="..\PheasantBench.Domain\PheasantBench.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
