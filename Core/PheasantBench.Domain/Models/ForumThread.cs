@@ -1,20 +1,16 @@
-﻿using Domain.Shared.Primitives;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace PheasantBench.Domain.Models
 {
-    public class ForumThread : Entity
+    public class ForumThread
     {
         public ForumThread()
         {
             Id = Guid.NewGuid();
             ForumMessages = new List<ForumMessage>();
         }
+        [Key]
+        public Guid Id { get; set; }
         [Required]
         [MaxLength(16)]
         public string Name { get; set; } = null!;

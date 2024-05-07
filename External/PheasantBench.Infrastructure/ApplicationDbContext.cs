@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using PheasantBench.Domain.Models;
 
 namespace PheasantBench.Infrastructure
 {
-    public sealed class ApplicationDbContext : IdentityDbContext<User, IdentityRole<Guid>,Guid>
+    public sealed class ApplicationDbContext : IdentityDbContext<User>
     {
         public DbSet<ForumMessage> ForumMessages { get; set; }
         public DbSet<ForumThread> ForumThreads { get; set; }

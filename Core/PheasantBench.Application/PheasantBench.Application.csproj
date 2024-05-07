@@ -7,16 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Abstractions\" />
     <Folder Include="Constants\" />
-    <Folder Include="EventHandlers\Commands\" />
-    <Folder Include="EventHandlers\Queries\" />
-    <Folder Include="Dtos\" />
     <Folder Include="RequestFeatures\" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\Desktop\Projects\Cascade\Shared\Application.Shared\Application.Shared.csproj" />
+    <PackageReference Include="MediatR" Version="12.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\PheasantBench.Domain\PheasantBench.Domain.csproj" />
   </ItemGroup>
 

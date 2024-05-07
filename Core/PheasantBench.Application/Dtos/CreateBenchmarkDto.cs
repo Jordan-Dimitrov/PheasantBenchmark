@@ -1,17 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace PheasantBench.Domain.Models
+namespace PheasantBench.Application.Dtos
 {
-    public class Benchmark
+    public class CreateBenchmarkDto
     {
-        public Benchmark()
-        {
-            Id = Guid.NewGuid();
-        }
-        [Key]
-        public Guid Id { get; set; }
-
         [MaxLength(255)]
         [Required]
         public string ProcessorName { get; set; } = null!;
@@ -28,9 +20,5 @@ namespace PheasantBench.Domain.Models
         public DateTime DateCreated { get; set; }
         [Required]
         public long Score { get; set; }
-        [Required]
-        [ForeignKey(nameof(User))]
-        public string UserId { get; set; }
-        public User User { get; set; }
     }
 }
