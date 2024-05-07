@@ -29,6 +29,7 @@ namespace PheasantBench.Infrastructure
             services.AddScoped<IUserUpvoteRepository, UserUpvoteRepository>();
             services.AddScoped<IForumThreadService, ForumThreadService>();
             services.AddScoped<IForumMessageService, ForumMessageService>();
+            services.AddScoped<IUserService, UserService>();
 
             return services;
         }

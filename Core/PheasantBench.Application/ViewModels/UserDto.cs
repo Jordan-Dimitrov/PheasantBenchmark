@@ -1,4 +1,4 @@
-﻿namespace PheasantBench.Application.Dtos
+﻿namespace PheasantBench.Application.ViewModels
 {
     public class UserDto
     {

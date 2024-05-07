@@ -1,5 +1,5 @@
-﻿using PheasantBench.Application.Dtos;
-using PheasantBench.Application.Responses;
+﻿using PheasantBench.Application.Responses;
+using PheasantBench.Application.ViewModels;
 
 namespace PheasantBench.Application.Abstractions
 {

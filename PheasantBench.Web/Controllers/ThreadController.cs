@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PheasantBench.Application.Abstractions;
 using PheasantBench.Application.Dtos;
+using PheasantBench.Application.ViewModels;
 using PheasantBench.Domain.Abstractions;
 using PheasantBench.Domain.Models;
 
@@ -10,28 +11,61 @@ namespace PheasantBench.Web.Controllers
     {
         private readonly IForumThreadService _ForumThreadService;
         private readonly IForumMessageService _ForumMessageService;
-        private readonly IUserRepository _UserRepository;
-        private readonly IForumThreadRepository _ForumThreadRepository;
+        private readonly IUserService _UserService;
         public ThreadController(IForumThreadService forumThreadService,
             IForumMessageService forumMessageService,
-            IUserRepository userRepository,
-            IForumThreadRepository forumThreadRepository)
+            IUserService userService)
         {
             _ForumThreadService = forumThreadService;
             _ForumMessageService = forumMessageService;
-            _UserRepository = userRepository;
-            _ForumThreadRepository = forumThreadRepository;
+            _UserService = userService;
         }
-        public async Task<IActionResult> Create()
+        [HttpGet]
+        public IActionResult Create()
         {
-            await _ForumThreadService.CreateForumThread(new CreateForumThreadDto() {Name = "tomaaa", Description = "Kude e tomaaa" });
+            return View();
+        }
 
-            var temp = await _ForumThreadRepository.GetAllAsync(true);
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(CreateForumThreadDto forumThread)
+        {
+            if(!ModelState.IsValid)
+            {
+                ViewBag.ErrorMessage = "Invalid input";
+                return View();  
+            }
 
-            var temp2 = await _UserRepository.GetAllAsync(true);
+            var response = await _ForumThreadService.CreateForumThread(forumThread);
 
-            _ForumMessageService.CreateForumMessage(new CreateForumMessageDto()
-            { MessageContent = "tomaaa", ForumThreadId = temp.First().Id }, temp2.First());
+            if (!response.Success)
+            {
+                ViewBag.ErrorMessage = response.ErrorMessage;
+                return View();
+            }
+
+            ViewBag.Success = "Added successfully";
+            return View();
+        }
+
+        [HttpDelete("{threadId:guid}")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Remove(Guid threadId)
+        {
+            var response = await _ForumThreadService.DeleteForumThread(threadId);
+
+            if (!response.Success)
+            {
+                ViewBag.ErrorMessage = response.ErrorMessage;
+                return View();
+            }
+
+            ViewBag.Success = "Removed successfully";
+            return View();
+        }
+
+        public async Task<IActionResult> GetThreads()
+        {
             return View();
         }
     }
