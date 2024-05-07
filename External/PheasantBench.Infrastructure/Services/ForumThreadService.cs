@@ -78,6 +78,7 @@ namespace PheasantBench.Infrastructure.Services
 
             response.Data = new ForumThreadDto()
             {
+                Id = benchmark.Id,
                 Name = benchmark.Name,
                 Description = benchmark.Description,
             };
@@ -101,6 +102,7 @@ namespace PheasantBench.Infrastructure.Services
             response.Data = benchmark
                 .Select(x => new ForumThreadDto()
             {
+                Id = x.Id,
                 Name = x.Name,
                 Description = x.Description,
             });

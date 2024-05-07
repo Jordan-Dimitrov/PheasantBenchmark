@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using PheasantBench.Domain.Models;
 
@@ -10,7 +11,7 @@ namespace PheasantBench.Infrastructure
         public DbSet<ForumThread> ForumThreads { get; set; }
         public DbSet<Benchmark> Benchmarks { get; set; }
         public DbSet<UserUpvotes> UsersUpvotes { get; set; }
-
+        public DbSet<User> Users {  get; set; }
         public ApplicationDbContext()
         {
         }

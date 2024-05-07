@@ -8,8 +8,6 @@ namespace PheasantBench.Application.Dtos
         [MaxLength(1024)]
         public string MessageContent { get; set; }
         [Required]
-        public DateTime DateCreated { get; set; }
-        [Required]
         public Guid ForumThreadId { get; set; }
     }
 }
