@@ -6,22 +6,22 @@ namespace PheasantBench.Infrastructure.Services
 {
     public class ForumThreadService : IForumThreadService
     {
-        Task<Response> IForumThreadService.CreateForumThread(CreateForumThreadDto benchmark, string token)
+        public async Task<Response> CreateForumThread(CreateForumThreadDto benchmark, string token)
         {
             throw new NotImplementedException();
         }
 
-        Task<Response> IForumThreadService.DeleteForumThread(Guid id)
+        public async Task<Response> DeleteForumThread(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        Task<DataResponse<ForumThreadDto>> IForumThreadService.GetForumThread(Guid id)
+        public async Task<DataResponse<ForumThreadDto>> GetForumThread(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        Task<DataResponse<ICollection<ForumThreadDto>>> IForumThreadService.GetForumThreadsPaged(int page, int size)
+        public async Task<DataResponse<IEnumerable<ForumThreadDto>>> GetForumThreadsPaged(int page, int size)
         {
             throw new NotImplementedException();
         }

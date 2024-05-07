@@ -8,6 +8,6 @@ namespace PheasantBench.Application.Abstractions
         Task<Response> CreateForumThread(CreateForumThreadDto benchmark, string token);
         Task<Response> DeleteForumThread(Guid id);
         Task<DataResponse<ForumThreadDto>> GetForumThread(Guid id);
-        Task<DataResponse<ICollection<ForumThreadDto>>> GetForumThreadsPaged(int page, int size);
+        Task<DataResponse<IEnumerable<ForumThreadDto>>> GetForumThreadsPaged(int page, int size);
     }
 }

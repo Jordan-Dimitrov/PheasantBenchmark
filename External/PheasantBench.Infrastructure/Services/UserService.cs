@@ -6,17 +6,17 @@ namespace PheasantBench.Infrastructure.Services
 {
     public class UserService : IUserService
     {
-        Task<Response> IUserService.DeleteBenchmark(Guid id)
+        public async Task<Response> DeleteBenchmark(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        Task<DataResponse<UserDto>> IUserService.GetBenchmark(Guid id)
+        public async Task<DataResponse<UserDto>> GetBenchmark(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        Task<DataResponse<ICollection<UserDto>>> IUserService.GetBenchmarksPaged(int page, int size)
+        public async Task<DataResponse<IEnumerable<UserDto>>> GetBenchmarksPaged(int page, int size)
         {
             throw new NotImplementedException();
         }

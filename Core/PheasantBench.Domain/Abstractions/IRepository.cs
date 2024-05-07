@@ -6,8 +6,8 @@ namespace PheasantBench.Domain.Abstractions
     {
         Task<T?> GetByIdAsync(Guid id, bool trackChanges);
         Task<bool> ExistsAsync(Expression<Func<T, bool>> condition);
-        Task<ICollection<T>> GetAllAsync(bool trackChanges);
-        Task<ICollection<T>> GetPagedAsync(bool trackChanges, int page, int size);
+        Task<IEnumerable<T>> GetAllAsync(bool trackChanges);
+        Task<IEnumerable<T>> GetPagedAsync(bool trackChanges, int page, int size);
         Task<T?> GetByAsync(Expression<Func<T, bool>> condition);
         Task<bool> InsertAsync(T value);
         Task<bool> UpdateAsync(T value);

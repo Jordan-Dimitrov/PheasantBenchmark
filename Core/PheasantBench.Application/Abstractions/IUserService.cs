@@ -7,6 +7,6 @@ namespace PheasantBench.Application.Abstractions
     {
         Task<Response> DeleteBenchmark(Guid id);
         Task<DataResponse<UserDto>> GetBenchmark(Guid id);
-        Task<DataResponse<ICollection<UserDto>>> GetBenchmarksPaged(int page, int size);
+        Task<DataResponse<IEnumerable<UserDto>>> GetBenchmarksPaged(int page, int size);
     }
 }

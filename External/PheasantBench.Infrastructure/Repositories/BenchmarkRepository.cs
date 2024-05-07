@@ -24,7 +24,7 @@ namespace PheasantBench.Infrastructure.Repositories
             return await _Context.Benchmarks.AnyAsync(condition);
         }
 
-        public async Task<ICollection<Benchmark>> GetAllAsync(bool trackChanges)
+        public async Task<IEnumerable<Benchmark>> GetAllAsync(bool trackChanges)
         {
             var query = _Context.Benchmarks;
 
@@ -56,7 +56,7 @@ namespace PheasantBench.Infrastructure.Repositories
             return await _Context.SaveChangesAsync() > 0;
         }
 
-        public async Task<ICollection<Benchmark>> GetPagedAsync(bool trackChanges, int page, int size)
+        public async Task<IEnumerable<Benchmark>> GetPagedAsync(bool trackChanges, int page, int size)
         {
             var query = _Context.Benchmarks.Skip(page * size).Take(size);
 

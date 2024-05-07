@@ -24,7 +24,7 @@ namespace PheasantBench.Infrastructure.Repositories
             return await _Context.ForumThreads.AnyAsync(condition);
         }
 
-        public async Task<ICollection<ForumThread>> GetAllAsync(bool trackChanges)
+        public async Task<IEnumerable<ForumThread>> GetAllAsync(bool trackChanges)
         {
             var query = _Context.ForumThreads;
 
@@ -56,7 +56,7 @@ namespace PheasantBench.Infrastructure.Repositories
             return await _Context.SaveChangesAsync() > 0;
         }
 
-        public async Task<ICollection<ForumThread>> GetPagedAsync(bool trackChanges, int page, int size)
+        public async Task<IEnumerable<ForumThread>> GetPagedAsync(bool trackChanges, int page, int size)
         {
             var query = _Context.ForumThreads.Skip(page * size).Take(size);
 

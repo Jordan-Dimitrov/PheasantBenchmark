@@ -23,9 +23,13 @@ namespace PheasantBench.Infrastructure.Services
         {
             User? user = await _UserRepository.GetByAsync(x => x.UserName == _TokenService.GetUsername(token));
 
+            Response response = new Response();
+
             if (user is null)
             {
-
+                response.Success = false;
+                response.ErrorMessage = "User not found";
+                return response;
             }
 
             Benchmark benchmark = new Benchmark()
@@ -36,25 +40,98 @@ namespace PheasantBench.Infrastructure.Services
                 OsVersion = benchmarkDto.OsVersion,
                 ProcessorName = benchmarkDto.ProcessorName,
                 Score = benchmarkDto.Score,
-                User = await _UserRepository.GetByAsync(x => x.UserName == _TokenService.GetUsername(token))
+                User = user
             };
+
+            if (!await _BenchmarkRepository.InsertAsync(benchmark))
+            {
+                response.Success = false;
+                response.ErrorMessage = "Unexpected error";
+            }
 
             return new Response();
         }
 
-        Task<Response> IBenchmarkService.DeleteBenchmark(Guid id)
+        public async Task<Response> DeleteBenchmark(Guid id)
         {
-            throw new NotImplementedException();
+            Response response = new Response();
+
+            Benchmark? benchmark = await _BenchmarkRepository.GetByIdAsync(id, true);
+
+            if (benchmark is null)
+            {
+                response.Success = false;
+                response.ErrorMessage = "Benchmark not found";
+                return response;
+            }
+
+            if (!await _BenchmarkRepository.DeleteAsync(benchmark))
+            {
+                response.Success = false;
+                response.ErrorMessage = "Unexpected error";
+            }
+
+            return response;
         }
 
-        Task<DataResponse<BenchmarkDto>> IBenchmarkService.GetBenchmark(Guid id)
+        public async Task<DataResponse<BenchmarkDto>> GetBenchmark(Guid id)
         {
-            throw new NotImplementedException();
+            DataResponse<BenchmarkDto> response = new DataResponse<BenchmarkDto>();
+
+            Benchmark? benchmark = await _BenchmarkRepository.GetByIdAsync(id, false);
+
+            if (benchmark is null)
+            {
+                response.Success = false;
+                response.ErrorMessage = "No such benchmark";
+                return response;
+            }
+
+            response.Data = new BenchmarkDto()
+            {
+                Architecture = benchmark.Architecture,
+                DateCreated = benchmark.DateCreated,
+                MachineName = benchmark.MachineName,
+                OsVersion = benchmark.OsVersion,
+                ProcessorName = benchmark.ProcessorName,
+                Score = benchmark.Score,
+                User = new UserDto
+                {
+                    Name = benchmark.User.UserName,
+                }
+            };
+
+            return response;
         }
 
-        Task<DataResponse<ICollection<BenchmarkDto>>> IBenchmarkService.GetBenchmarksPaged(int page, int size)
+        public async Task<DataResponse<IEnumerable<BenchmarkDto>>> GetBenchmarksPaged(int page, int size)
         {
-            throw new NotImplementedException();
+            DataResponse<IEnumerable<BenchmarkDto>> response = new DataResponse<IEnumerable<BenchmarkDto>>();
+
+            var benchmark = await _BenchmarkRepository.GetPagedAsync(false, page, size);
+
+            if (benchmark is null)
+            {
+                response.Success = false;
+                response.ErrorMessage = "No such benchmarks";
+                return response;
+            }
+
+            response.Data = benchmark.Select(x => new BenchmarkDto()
+            {
+                Architecture = x.Architecture,
+                DateCreated = x.DateCreated,
+                MachineName = x.MachineName,
+                OsVersion = x.OsVersion,
+                ProcessorName = x.ProcessorName,
+                Score = x.Score,
+                User = new UserDto
+                {
+                    Name = x.User.UserName,
+                }
+            });
+
+            return response;
         }
     }
 }

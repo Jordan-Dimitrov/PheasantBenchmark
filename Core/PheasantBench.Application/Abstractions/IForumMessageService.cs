@@ -8,6 +8,6 @@ namespace PheasantBench.Application.Abstractions
         Task<Response> CreateForumMessage(CreateBenchmarkDto benchmark, string token);
         Task<Response> DeleteForumMessage(Guid id);
         Task<DataResponse<BenchmarkDto>> GetBForumMessage(Guid id);
-        Task<DataResponse<ICollection<BenchmarkDto>>> GetForumMessagesPaged(int page, int size);
+        Task<DataResponse<IEnumerable<BenchmarkDto>>> GetForumMessagesPaged(int page, int size);
     }
 }
