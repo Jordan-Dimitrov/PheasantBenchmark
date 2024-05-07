@@ -1,12 +1,13 @@
 ﻿using PheasantBench.Application.Dtos;
+using PheasantBench.Application.Responses;
 
 namespace PheasantBench.Application.Abstractions
 {
     public interface IForumMessageService
     {
-        Task CreateBenchmark(CreateBenchmarkDto benchmark, string token);
-        Task DeleteBenchmark(Guid id);
-        Task GetBenchmark(Guid id);
-        Task GetBenchmarksPaged(int page, int size);
+        Task<Response> CreateForumMessage(CreateBenchmarkDto benchmark, string token);
+        Task<Response> DeleteForumMessage(Guid id);
+        Task<DataResponse<BenchmarkDto>> GetBForumMessage(Guid id);
+        Task<DataResponse<ICollection<BenchmarkDto>>> GetForumMessagesPaged(int page, int size);
     }
 }

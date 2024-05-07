@@ -17,8 +17,6 @@ namespace PheasantBench.Application.Dtos
         [Required]
         public string OsVersion { get; set; } = null!;
         [Required]
-        public DateTime DateCreated { get; set; }
-        [Required]
         public long Score { get; set; }
     }
 }
