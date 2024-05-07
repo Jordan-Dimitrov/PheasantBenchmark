@@ -1,24 +1,81 @@
 ﻿using PheasantBench.Application.Abstractions;
 using PheasantBench.Application.Dtos;
 using PheasantBench.Application.Responses;
+using PheasantBench.Domain.Abstractions;
+using PheasantBench.Domain.Models;
 
 namespace PheasantBench.Infrastructure.Services
 {
     public class UserService : IUserService
     {
-        public async Task<Response> DeleteBenchmark(Guid id)
+        private readonly IUserRepository _UserRepository;
+        public UserService(IUserRepository userRepository)
         {
-            throw new NotImplementedException();
+            _UserRepository = userRepository;
+        }
+        public async Task<Response> DeleteUser(Guid id)
+        {
+            Response response = new Response();
+
+            User? user = await _UserRepository.GetByIdAsync(id, true);
+
+            if (user is null)
+            {
+                response.Success = false;
+                response.ErrorMessage = "No such user";
+                return response;
+            }
+
+            if(!await _UserRepository.DeleteAsync(user))
+            {
+                response.Success = false;
+                response.ErrorMessage = "Unexpected error";
+                return response;
+            }
+
+            return response;
         }
 
-        public async Task<DataResponse<UserDto>> GetBenchmark(Guid id)
+        public async Task<DataResponse<UserDto>> GetUser(Guid id)
         {
-            throw new NotImplementedException();
+            DataResponse<UserDto> response = new DataResponse<UserDto>();
+
+            User? user = await _UserRepository.GetByIdAsync(id, true);
+
+            if (user is null)
+            {
+                response.Success = false;
+                response.ErrorMessage = "No such user";
+                return response;
+            }
+
+            response.Data = new UserDto()
+            {
+                Name = user.NormalizedUserName
+            };
+
+            return response;
         }
 
-        public async Task<DataResponse<IEnumerable<UserDto>>> GetBenchmarksPaged(int page, int size)
+        public async Task<DataResponse<IEnumerable<UserDto>>> GetUsersPaged(int page, int size)
         {
-            throw new NotImplementedException();
+            DataResponse<IEnumerable<UserDto>> response = new DataResponse<IEnumerable<UserDto>>();
+
+            var users = await _UserRepository.GetPagedAsync(false, page, size);
+
+            if (users is null)
+            {
+                response.Success = false;
+                response.ErrorMessage = "No such users";
+                return response;
+            }
+
+            response.Data = users.Select(x => new UserDto()
+            {
+                Name = x.UserName,
+            });
+
+            return response;
         }
     }
 }

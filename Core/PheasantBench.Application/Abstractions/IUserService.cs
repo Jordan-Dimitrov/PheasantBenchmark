@@ -5,8 +5,8 @@ namespace PheasantBench.Application.Abstractions
 {
     public interface IUserService
     {
-        Task<Response> DeleteBenchmark(Guid id);
-        Task<DataResponse<UserDto>> GetBenchmark(Guid id);
-        Task<DataResponse<IEnumerable<UserDto>>> GetBenchmarksPaged(int page, int size);
+        Task<Response> DeleteUser(Guid id);
+        Task<DataResponse<UserDto>> GetUser(Guid id);
+        Task<DataResponse<IEnumerable<UserDto>>> GetUsersPaged(int page, int size);
     }
 }

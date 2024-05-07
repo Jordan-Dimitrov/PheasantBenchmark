@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PheasantBench.Domain", "Cor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PheasantBench.Infrastructure", "External\PheasantBench.Infrastructure\PheasantBench.Infrastructure.csproj", "{B02FDCA9-1F4E-45A2-96C8-BD6AF237ABE9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PheasantBench.Web", "PheasantBench.Web\PheasantBench.Web.csproj", "{BED5782B-1D5F-4E9A-A312-C351B195DD05}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PheasantBench.Web", "PheasantBench.Web\PheasantBench.Web.csproj", "{5533DFBE-D465-48AE-853D-51B5450760FC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,10 +45,10 @@ Global
 		{B02FDCA9-1F4E-45A2-96C8-BD6AF237ABE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B02FDCA9-1F4E-45A2-96C8-BD6AF237ABE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B02FDCA9-1F4E-45A2-96C8-BD6AF237ABE9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BED5782B-1D5F-4E9A-A312-C351B195DD05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BED5782B-1D5F-4E9A-A312-C351B195DD05}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BED5782B-1D5F-4E9A-A312-C351B195DD05}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BED5782B-1D5F-4E9A-A312-C351B195DD05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5533DFBE-D465-48AE-853D-51B5450760FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5533DFBE-D465-48AE-853D-51B5450760FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5533DFBE-D465-48AE-853D-51B5450760FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5533DFBE-D465-48AE-853D-51B5450760FC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

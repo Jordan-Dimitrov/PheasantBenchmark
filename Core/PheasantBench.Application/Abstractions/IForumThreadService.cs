@@ -5,7 +5,7 @@ namespace PheasantBench.Application.Abstractions
 {
     public interface IForumThreadService
     {
-        Task<Response> CreateForumThread(CreateForumThreadDto benchmark, string token);
+        Task<Response> CreateForumThread(CreateForumThreadDto benchmark);
         Task<Response> DeleteForumThread(Guid id);
         Task<DataResponse<ForumThreadDto>> GetForumThread(Guid id);
         Task<DataResponse<IEnumerable<ForumThreadDto>>> GetForumThreadsPaged(int page, int size);

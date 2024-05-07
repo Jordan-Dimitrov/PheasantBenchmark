@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using PheasantBench.Application;
-using PheasantBench.Domain.Models;
 using PheasantBench.Infrastructure;
+
 namespace PheasantBench.Web
 {
     public class Program
@@ -13,18 +12,13 @@ namespace PheasantBench.Web
 
             // Add services to the container.
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-            builder.Services.AddAuthentication();
-            builder.Services
-                .AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedEmail = false)
+
+            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-
             builder.Services.AddControllersWithViews();
-
-            builder.Services
-                .AddApplication()
-                .AddInfrastructure(builder.Configuration.GetConnectionString("DefaultConnection"));
 
             var app = builder.Build();
 

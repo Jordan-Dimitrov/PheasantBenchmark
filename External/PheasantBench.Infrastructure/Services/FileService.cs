@@ -58,7 +58,7 @@ namespace PheasantBench.Infrastructure.Services
 
                     response.Data = new FileContentResult(fileBytes, contentType);
                     response.Success = true;
-                    response.ErrorMessage = "";
+                    response.ErrorMessage = string.Empty;
 
                     return response;
                 }
@@ -83,7 +83,7 @@ namespace PheasantBench.Infrastructure.Services
             {
                 File.Delete(filePath);
                 response.Success = true;
-                response.ErrorMessage = "";
+                response.ErrorMessage = string.Empty;
 
                 return response;
             }
@@ -114,7 +114,7 @@ namespace PheasantBench.Infrastructure.Services
             }
 
             response.Success = true;
-            response.ErrorMessage = "";
+            response.ErrorMessage = string.Empty;
 
             return response;
         }
