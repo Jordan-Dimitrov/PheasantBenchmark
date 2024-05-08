@@ -4,7 +4,6 @@ using PheasantBench.Application.Responses;
 using PheasantBench.Application.ViewModels;
 using PheasantBench.Domain.Abstractions;
 using PheasantBench.Domain.Models;
-using PheasantBench.Infrastructure.Repositories;
 
 namespace PheasantBench.Infrastructure.Services
 {
@@ -20,14 +19,14 @@ namespace PheasantBench.Infrastructure.Services
         {
             Response response = new Response();
 
-            if(await _ForumThreadRepository.ExistsAsync(x => x.Name == benchmark.Name))
+            if (await _ForumThreadRepository.ExistsAsync(x => x.Name == benchmark.Name))
             {
                 response.Success = false;
                 response.ErrorMessage = "Forum thread already exists";
                 return response;
             }
 
-            ForumThread forumThread = new ForumThread() 
+            ForumThread forumThread = new ForumThread()
             {
                 Name = benchmark.Name,
                 Description = benchmark.Description,
@@ -93,7 +92,7 @@ namespace PheasantBench.Infrastructure.Services
 
             var benchmark = await _ForumThreadRepository.GetPagedAsync(false, page, size);
 
-            if (benchmark is null)
+            if (!benchmark.Any())
             {
                 response.Success = false;
                 response.ErrorMessage = "No such threads";
@@ -102,11 +101,11 @@ namespace PheasantBench.Infrastructure.Services
 
             response.Data = benchmark
                 .Select(x => new ForumThreadDto()
-            {
-                Id = x.Id,
-                Name = x.Name,
-                Description = x.Description,
-            });
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Description = x.Description,
+                });
 
             return response;
         }

@@ -1,12 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PheasantBench.Domain.Abstractions;
 using PheasantBench.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PheasantBench.Infrastructure.Repositories
 {
@@ -42,14 +37,15 @@ namespace PheasantBench.Infrastructure.Repositories
         {
             var query = _Context.UsersUpvotes.Where(x => x.ForumMessageId == id);
 
-            return await(trackChanges ? query.FirstOrDefaultAsync() : query.AsNoTracking().FirstOrDefaultAsync());
+            return await (trackChanges ? query.FirstOrDefaultAsync() : query.AsNoTracking().FirstOrDefaultAsync());
         }
 
         public async Task<IEnumerable<UserUpvotes>> GetPagedAsync(bool trackChanges, int page, int size)
         {
-            var query = _Context.UsersUpvotes.Skip(page * size).Take(size);
+            var query = _Context.UsersUpvotes.Skip((page - 1) * size)
+                .Take(size);
 
-            return await(trackChanges ? query.ToListAsync() : query.AsNoTracking().ToListAsync());
+            return await (trackChanges ? query.ToListAsync() : query.AsNoTracking().ToListAsync());
         }
 
         public async Task<UserUpvotes?> GetUserUpvoteByMessageAndUserAsync(string userId, Guid forumId)

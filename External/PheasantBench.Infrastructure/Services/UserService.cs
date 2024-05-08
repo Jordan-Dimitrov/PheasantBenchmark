@@ -26,7 +26,7 @@ namespace PheasantBench.Infrastructure.Services
                 return response;
             }
 
-            if(!await _UserRepository.DeleteAsync(user))
+            if (!await _UserRepository.DeleteAsync(user))
             {
                 response.Success = false;
                 response.ErrorMessage = "Unexpected error";
@@ -63,7 +63,7 @@ namespace PheasantBench.Infrastructure.Services
 
             var users = await _UserRepository.GetPagedAsync(false, page, size);
 
-            if (users is null)
+            if (!users.Any())
             {
                 response.Success = false;
                 response.ErrorMessage = "No such users";

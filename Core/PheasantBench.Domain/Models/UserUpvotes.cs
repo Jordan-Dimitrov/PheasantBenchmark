@@ -13,6 +13,6 @@ namespace PheasantBench.Domain.Models
         [ForeignKey(nameof(User))]
         public string UserId { get; set; }
         public User User { get; set; } = null!;
-        public byte Rating {  get; set; }
+        public byte Rating { get; set; }
     }
 }

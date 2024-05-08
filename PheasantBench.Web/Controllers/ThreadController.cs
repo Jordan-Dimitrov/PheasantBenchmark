@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PheasantBench.Application.Abstractions;
 using PheasantBench.Application.Dtos;
-using PheasantBench.Application.ViewModels;
-using PheasantBench.Domain.Abstractions;
-using PheasantBench.Domain.Models;
 
 namespace PheasantBench.Web.Controllers
 {
@@ -12,6 +9,7 @@ namespace PheasantBench.Web.Controllers
         private readonly IForumThreadService _ForumThreadService;
         private readonly IForumMessageService _ForumMessageService;
         private readonly IUserService _UserService;
+        private const int _Size = 5;
         public ThreadController(IForumThreadService forumThreadService,
             IForumMessageService forumMessageService,
             IUserService userService)
@@ -30,10 +28,10 @@ namespace PheasantBench.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateForumThreadDto forumThread)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 ViewBag.ErrorMessage = "Invalid input";
-                return View();  
+                return View();
             }
 
             var response = await _ForumThreadService.CreateForumThread(forumThread);
@@ -48,11 +46,10 @@ namespace PheasantBench.Web.Controllers
             return View();
         }
 
-        [HttpDelete("{threadId:guid}")]
-        [ValidateAntiForgeryToken]
+        [HttpGet]
         public async Task<IActionResult> Remove(Guid threadId)
         {
-            var response = await _ForumThreadService.DeleteForumThread(threadId);
+            var response = await _ForumThreadService.GetForumThread(threadId);
 
             if (!response.Success)
             {
@@ -60,13 +57,40 @@ namespace PheasantBench.Web.Controllers
                 return View();
             }
 
-            ViewBag.Success = "Removed successfully";
-            return View();
+            ViewBag.Success = "Added successfully";
+
+            return View(response.Data);
         }
 
-        public async Task<IActionResult> GetThreads()
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(Guid threadId)
         {
-            return View();
+            var response = await _ForumThreadService.DeleteForumThread(threadId);
+
+            if (!response.Success)
+            {
+                ViewBag.ErrorMessage = response.ErrorMessage;
+                return RedirectToAction("Create");
+            }
+
+            ViewBag.Success = "Removed successfully";
+
+            return RedirectToAction("Create");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetThreads([FromQuery] int page)
+        {
+            var response = await _ForumThreadService.GetForumThreadsPaged(page, _Size);
+
+            if (!response.Success)
+            {
+                ViewBag.ErrorMessage = response.ErrorMessage;
+                return RedirectToAction("Create");
+            }
+
+            return View(response.Data);
         }
     }
 }

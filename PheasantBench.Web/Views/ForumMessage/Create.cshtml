@@ -1,0 +1,6 @@
+﻿@model PheasantBench.Application.Dtos.CreateForumMessageDto
+<form asp-controller="ForumMessage" asp-action="Create" method="post">
+    <input asp-for="@Model.MessageContent" />
+    <input asp-for="@Model.ForumThreadId" />
+    <button >submit</button>
+</form>

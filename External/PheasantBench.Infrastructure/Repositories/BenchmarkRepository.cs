@@ -58,7 +58,8 @@ namespace PheasantBench.Infrastructure.Repositories
 
         public async Task<IEnumerable<Benchmark>> GetPagedAsync(bool trackChanges, int page, int size)
         {
-            var query = _Context.Benchmarks.Skip(page * size).Take(size);
+            var query = _Context.Benchmarks.Skip((page - 1) * size)
+                .Take(size); ;
 
             return await (trackChanges ? query.ToListAsync() : query.AsNoTracking().ToListAsync());
         }

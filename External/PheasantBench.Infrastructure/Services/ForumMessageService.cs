@@ -1,12 +1,10 @@
-﻿using Microsoft.AspNet.Identity;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using PheasantBench.Application.Abstractions;
 using PheasantBench.Application.Dtos;
 using PheasantBench.Application.Responses;
 using PheasantBench.Application.ViewModels;
 using PheasantBench.Domain.Abstractions;
 using PheasantBench.Domain.Models;
-using PheasantBench.Infrastructure.Repositories;
 
 namespace PheasantBench.Infrastructure.Services
 {
@@ -14,15 +12,20 @@ namespace PheasantBench.Infrastructure.Services
     {
         private readonly IForumMessageRepository _ForumMessageRepository;
         private readonly IFileService _FileService;
+        private readonly IUserRepository _UserRepository;
         public ForumMessageService(IForumMessageRepository forumMessageRepository,
-            IFileService fileService)
+            IFileService fileService,
+            IUserRepository userRepository)
         {
             _ForumMessageRepository = forumMessageRepository;
             _FileService = fileService;
+            _UserRepository = userRepository;
         }
-        public async Task<Response> CreateForumMessageWithFile(CreateForumMessageDto benchmark, User user, IFormFile file)
+        public async Task<Response> CreateForumMessageWithFile(CreateForumMessageDto benchmark, string userId, IFormFile file)
         {
             Response response = new Response();
+
+            var user = await _UserRepository.GetByIdAsync(Guid.Parse(userId), true);
 
             if (user is null)
             {
@@ -43,7 +46,7 @@ namespace PheasantBench.Infrastructure.Services
 
             var fileResponse = await _FileService.UploadAsync(file);
 
-            if(!fileResponse.Success)
+            if (!fileResponse.Success)
             {
                 return fileResponse;
             }
@@ -57,9 +60,11 @@ namespace PheasantBench.Infrastructure.Services
             return new Response();
         }
 
-        public async Task<Response> CreateForumMessage(CreateForumMessageDto benchmark, User user)
+        public async Task<Response> CreateForumMessage(CreateForumMessageDto benchmark, string userId)
         {
             Response response = new Response();
+
+            var user = await _UserRepository.GetByIdAsync(Guid.Parse(userId), true);
 
             if (user is null)
             {
@@ -99,7 +104,7 @@ namespace PheasantBench.Infrastructure.Services
                 return response;
             }
 
-            if(benchmark.FileName is not null)
+            if (benchmark.FileName is not null)
             {
                 var fileResponse = await _FileService.RemoveAsync(benchmark.FileName);
 
@@ -149,7 +154,7 @@ namespace PheasantBench.Infrastructure.Services
 
             var benchmark = await _ForumMessageRepository.GetPagedAsync(false, page, size);
 
-            if (benchmark is null)
+            if (!benchmark.Any())
             {
                 response.Success = false;
                 response.ErrorMessage = "No such forum mesasges";
@@ -174,7 +179,7 @@ namespace PheasantBench.Infrastructure.Services
 
             var benchmark = await _ForumMessageRepository.GetPagedByThreadAsync(page, size, threadId, false);
 
-            if (benchmark is null)
+            if (!benchmark.Any())
             {
                 response.Success = false;
                 response.ErrorMessage = "No such forum mesasges";

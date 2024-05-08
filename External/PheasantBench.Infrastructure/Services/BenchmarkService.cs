@@ -111,7 +111,7 @@ namespace PheasantBench.Infrastructure.Services
 
             var benchmark = await _BenchmarkRepository.GetPagedAsync(false, page, size);
 
-            if (benchmark is null)
+            if (!benchmark.Any())
             {
                 response.Success = false;
                 response.ErrorMessage = "No such benchmarks";

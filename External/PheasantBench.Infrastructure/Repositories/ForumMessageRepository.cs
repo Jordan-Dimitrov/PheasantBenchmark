@@ -58,17 +58,19 @@ namespace PheasantBench.Infrastructure.Repositories
 
         public async Task<IEnumerable<ForumMessage>> GetPagedAsync(bool trackChanges, int page, int size)
         {
-            var query = _Context.ForumMessages.Skip(page * size).Take(size);
+            var query = _Context.ForumMessages.Skip((page - 1) * size)
+                .Take(size);
 
             return await (trackChanges ? query.ToListAsync() : query.AsNoTracking().ToListAsync());
         }
 
         public async Task<IEnumerable<ForumMessage>> GetPagedByThreadAsync(int page, int size, Guid threadId, bool trackChanges)
         {
-            var query = _Context.ForumMessages.Skip(page * size).Take(size)
+            var query = _Context.ForumMessages.Skip((page - 1) * size)
+                .Take(size)
                 .Where(x => x.ForumThreadId == threadId);
 
-            return await(trackChanges ? query.ToListAsync() : query.AsNoTracking().ToListAsync());
+            return await (trackChanges ? query.ToListAsync() : query.AsNoTracking().ToListAsync());
         }
     }
 }
