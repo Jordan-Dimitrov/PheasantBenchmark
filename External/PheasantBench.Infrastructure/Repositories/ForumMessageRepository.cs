@@ -68,9 +68,15 @@ namespace PheasantBench.Infrastructure.Repositories
         {
             var query = _Context.ForumMessages.Skip((page - 1) * size)
                 .Take(size)
-                .Where(x => x.ForumThreadId == threadId);
+                .Where(x => x.ForumThreadId == threadId)
+                .OrderByDescending(x => x.UpvoteCount);
 
             return await (trackChanges ? query.ToListAsync() : query.AsNoTracking().ToListAsync());
+        }
+
+        public async Task<int> GetPageCount(int size)
+        {
+            return Math.Max(await _Context.ForumMessages.CountAsync() / size, 1);
         }
     }
 }

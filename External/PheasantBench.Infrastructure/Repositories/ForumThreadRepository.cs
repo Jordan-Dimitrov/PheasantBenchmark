@@ -63,5 +63,10 @@ namespace PheasantBench.Infrastructure.Repositories
 
             return await (trackChanges ? query.ToListAsync() : query.AsNoTracking().ToListAsync());
         }
+
+        public async Task<int> GetPageCount(int size)
+        {
+            return Math.Max(await _Context.ForumThreads.CountAsync() / size, 1);
+        }
     }
 }

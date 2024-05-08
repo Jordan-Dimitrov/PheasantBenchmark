@@ -12,5 +12,6 @@ namespace PheasantBench.Domain.Abstractions
         Task<bool> InsertAsync(T value);
         Task<bool> UpdateAsync(T value);
         Task<bool> DeleteAsync(T value);
+        Task<int> GetPageCount(int size);
     }
 }

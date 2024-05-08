@@ -34,6 +34,13 @@ namespace PheasantBench.Web
 
             var app = builder.Build();
 
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                var dbContext = services.GetRequiredService<ApplicationDbContext>();
+                var seed = services.GetRequiredService<Seed>();
+                seed.SeedContext().Wait();
+            }
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

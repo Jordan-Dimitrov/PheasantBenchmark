@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Http;
 using PheasantBench.Application.Abstractions;
 using PheasantBench.Application.Dtos;
 using PheasantBench.Application.Responses;
 using PheasantBench.Application.ViewModels;
 using PheasantBench.Domain.Abstractions;
 using PheasantBench.Domain.Models;
+using PheasantBench.Infrastructure.Repositories;
 
 namespace PheasantBench.Infrastructure.Services
 {
@@ -14,8 +16,7 @@ namespace PheasantBench.Infrastructure.Services
         private readonly IFileService _FileService;
         private readonly IUserRepository _UserRepository;
         public ForumMessageService(IForumMessageRepository forumMessageRepository,
-            IFileService fileService,
-            IUserRepository userRepository)
+            IFileService fileService, IUserRepository userRepository)
         {
             _ForumMessageRepository = forumMessageRepository;
             _FileService = fileService;
@@ -46,7 +47,7 @@ namespace PheasantBench.Infrastructure.Services
 
             var fileResponse = await _FileService.UploadAsync(file);
 
-            if (!fileResponse.Success)
+            if(!fileResponse.Success)
             {
                 return fileResponse;
             }
@@ -104,7 +105,7 @@ namespace PheasantBench.Infrastructure.Services
                 return response;
             }
 
-            if (benchmark.FileName is not null)
+            if(benchmark.FileName is not null)
             {
                 var fileResponse = await _FileService.RemoveAsync(benchmark.FileName);
 
@@ -154,7 +155,7 @@ namespace PheasantBench.Infrastructure.Services
 
             var benchmark = await _ForumMessageRepository.GetPagedAsync(false, page, size);
 
-            if (!benchmark.Any())
+            if (benchmark is null)
             {
                 response.Success = false;
                 response.ErrorMessage = "No such forum mesasges";
@@ -179,7 +180,7 @@ namespace PheasantBench.Infrastructure.Services
 
             var benchmark = await _ForumMessageRepository.GetPagedByThreadAsync(page, size, threadId, false);
 
-            if (!benchmark.Any())
+            if (benchmark is null)
             {
                 response.Success = false;
                 response.ErrorMessage = "No such forum mesasges";

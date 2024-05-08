@@ -86,9 +86,10 @@ namespace PheasantBench.Infrastructure.Services
             return response;
         }
 
-        public async Task<DataResponse<IEnumerable<ForumThreadDto>>> GetForumThreadsPaged(int page, int size)
+        public async Task<DataResponse<ForumThreadPagedDto>> GetForumThreadsPaged(int page, int size)
         {
-            DataResponse<IEnumerable<ForumThreadDto>> response = new DataResponse<IEnumerable<ForumThreadDto>>();
+            DataResponse<ForumThreadPagedDto> response = new DataResponse<ForumThreadPagedDto>();
+            response.Data = new ForumThreadPagedDto();
 
             var benchmark = await _ForumThreadRepository.GetPagedAsync(false, page, size);
 
@@ -99,13 +100,15 @@ namespace PheasantBench.Infrastructure.Services
                 return response;
             }
 
-            response.Data = benchmark
+            response.Data.ForumThreads = benchmark
                 .Select(x => new ForumThreadDto()
                 {
                     Id = x.Id,
                     Name = x.Name,
                     Description = x.Description,
                 });
+
+            response.Data.TotalPages = await _ForumThreadRepository.GetPageCount(size);
 
             return response;
         }

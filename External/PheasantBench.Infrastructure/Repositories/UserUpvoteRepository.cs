@@ -67,5 +67,10 @@ namespace PheasantBench.Infrastructure.Repositories
 
             return await _Context.SaveChangesAsync() > 0;
         }
+
+        public async Task<int> GetPageCount(int size)
+        {
+            return Math.Max(await _Context.UsersUpvotes.CountAsync() / size, 1);
+        }
     }
 }

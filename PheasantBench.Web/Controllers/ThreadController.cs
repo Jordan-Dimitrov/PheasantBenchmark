@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PheasantBench.Application.Abstractions;
 using PheasantBench.Application.Dtos;
+using PheasantBench.Domain.Enums;
 
 namespace PheasantBench.Web.Controllers
 {
@@ -18,13 +20,16 @@ namespace PheasantBench.Web.Controllers
             _ForumMessageService = forumMessageService;
             _UserService = userService;
         }
+
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateForumThreadDto forumThread)
         {
@@ -47,6 +52,7 @@ namespace PheasantBench.Web.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Remove(Guid threadId)
         {
             var response = await _ForumThreadService.GetForumThread(threadId);
@@ -57,12 +63,11 @@ namespace PheasantBench.Web.Controllers
                 return View();
             }
 
-            ViewBag.Success = "Added successfully";
-
             return View(response.Data);
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(Guid threadId)
         {
@@ -90,7 +95,10 @@ namespace PheasantBench.Web.Controllers
                 return RedirectToAction("Create");
             }
 
+            ViewBag.PageNumber = page;
+
             return View(response.Data);
         }
+
     }
 }

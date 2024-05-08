@@ -9,12 +9,14 @@ namespace PheasantBench.Infrastructure
         private readonly ApplicationDbContext _Context;
         private readonly UserManager<User> _UserManager;
         private readonly RoleManager<IdentityRole> _RoleManager;
+        private readonly IUserStore<User> _UserStore;
         public Seed(ApplicationDbContext context, UserManager<User> userManager,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager, IUserStore<User> userStore)
         {
             _Context = context;
             _UserManager = userManager;
             _RoleManager = roleManager;
+            _UserStore = userStore;
         }
 
         public async Task SeedContext()
@@ -33,38 +35,22 @@ namespace PheasantBench.Infrastructure
                     await _RoleManager.CreateAsync(new IdentityRole(Role.Admin.ToString()));
                 }
 
-                List<User> users = new List<User>()
-                {
-                    new User()
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    UserName = "admin",
-                    NormalizedUserName = "ADMIN",
-                    Email = "admin@gmail.com",
-                    NormalizedEmail = "ADMIN@GMAIL.COM",
-                    SecurityStamp = Guid.NewGuid().ToString(),
-                },
-                    new User()
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        UserName = "tomaaa",
-                        NormalizedUserName = "TOMAAA",
-                        Email = "tomaaa@gmail.com",
-                        NormalizedEmail = "TOMAAA@GMAIL.COM",
-                        SecurityStamp = Guid.NewGuid().ToString(),
-                    }
-                };
+                User user = new User();
+                User admin = new User();
 
-                _Context.AddRange(users);
-                _Context.SaveChanges();
+                await _UserStore.SetUserNameAsync(admin, "admin@gmail.com", default);
+                await ((IUserEmailStore<User>)_UserStore).SetEmailAsync(admin, "admin@gmail.com", default);
+                await ((IUserEmailStore<User>)_UserStore).SetEmailConfirmedAsync(admin, true, default);
+                await _UserManager.CreateAsync(admin, "Pr0toty1pe@1");
 
-                users[0].PasswordHash = hasher.HashPassword(users[0], "Pr0t1type");
-                await _UserManager.AddToRoleAsync(users[0], Role.Admin.ToString());
+                await _UserManager.AddToRoleAsync(admin, Role.Admin.ToString());
 
-                users[1].PasswordHash = hasher.HashPassword(users[1], "Pr0t1type");
-                await _UserManager.AddToRoleAsync(users[1], Role.User.ToString());
+                await _UserStore.SetUserNameAsync(user, "tomaaa@gmail.com", default);
+                await ((IUserEmailStore<User>)_UserStore).SetEmailAsync(user, "tomaaa@gmail.com", default);
+                await ((IUserEmailStore<User>)_UserStore).SetEmailConfirmedAsync(user, true, default);
+                await _UserManager.CreateAsync(user, "Pr0toty1pe@1");
 
-                _Context.SaveChanges();
+                await _UserManager.AddToRoleAsync(user, Role.User.ToString());
 
                 List<ForumThread> threads = new List<ForumThread>()
                 {
@@ -89,14 +75,14 @@ namespace PheasantBench.Infrastructure
                     {
                         MessageContent = "OC Monster",
                         ForumThreadId = threads[0].Id,
-                        UserId = users[0].Id,
+                        UserId = admin.Id,
                         DateCreated = DateTime.Now
                 },
                     new ForumMessage()
                     {
                         MessageContent = "TOMAAAA",
                         ForumThreadId = threads[1].Id,
-                        UserId = users[1].Id,
+                        UserId = user.Id,
                         DateCreated = DateTime.Now
                     }
                 };
@@ -114,7 +100,7 @@ namespace PheasantBench.Infrastructure
                         OsVersion = "Windows 11",
                         DateCreated = DateTime.Now,
                         Score = 100,
-                        UserId = users[1].Id,
+                        UserId = admin.Id,
                 },
                     new Benchmark()
                     {
@@ -124,7 +110,7 @@ namespace PheasantBench.Infrastructure
                         OsVersion = "Windows 10",
                         DateCreated = DateTime.Now,
                         Score = 200,
-                        UserId = users[1].Id,
+                        UserId = user.Id,
                     }
                 };
 

@@ -59,9 +59,15 @@ namespace PheasantBench.Infrastructure.Repositories
         public async Task<IEnumerable<Benchmark>> GetPagedAsync(bool trackChanges, int page, int size)
         {
             var query = _Context.Benchmarks.Skip((page - 1) * size)
-                .Take(size); ;
+                .Take(size)
+                .OrderByDescending(x => x.Score);
 
             return await (trackChanges ? query.ToListAsync() : query.AsNoTracking().ToListAsync());
+        }
+
+        public async Task<int> GetPageCount(int size)
+        {
+            return Math.Max(await _Context.Benchmarks.CountAsync() / size, 1);
         }
     }
 }
