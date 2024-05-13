@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using PheasantBench.Application.Abstractions;
 using PheasantBench.Application.Dtos;
-using PheasantBench.Domain.Enums;
 
 namespace PheasantBench.Web.Controllers
 {
@@ -76,16 +75,16 @@ namespace PheasantBench.Web.Controllers
             if (!response.Success)
             {
                 ViewBag.ErrorMessage = response.ErrorMessage;
-                return RedirectToAction("Create");
+                return RedirectToAction("Remove");
             }
 
             ViewBag.Success = "Removed successfully";
 
-            return RedirectToAction("Create");
+            return RedirectToAction("GetThreads");
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetThreads([FromQuery] int page)
+        public async Task<IActionResult> GetThreads([FromQuery] int page = 1)
         {
             var response = await _ForumThreadService.GetForumThreadsPaged(page, _Size);
 

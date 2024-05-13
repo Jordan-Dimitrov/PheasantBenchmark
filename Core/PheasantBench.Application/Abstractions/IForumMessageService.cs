@@ -11,7 +11,7 @@ namespace PheasantBench.Application.Abstractions
         Task<Response> CreateForumMessageWithFile(CreateForumMessageDto benchmark, string userId, IFormFile file);
         Task<Response> DeleteForumMessage(Guid id);
         Task<DataResponse<ForumMessageDto>> GetBForumMessage(Guid id);
-        Task<DataResponse<IEnumerable<ForumMessageDto>>> GetForumMessagesPaged(int page, int size);
-        Task<DataResponse<IEnumerable<ForumMessageDto>>> GetForumMessagesPagedByThread(int page, int size, Guid threadId);
+        Task<DataResponse<ForumMessagesPagedDto>> GetForumMessagesPaged(int page, int size);
+        Task<DataResponse<ForumMessagesPagedDto>> GetForumMessagesPagedByThread(int page, int size, Guid threadId);
     }
 }

@@ -6,8 +6,16 @@
 
 <h1>Delete Forum Thread</h1>
 
+@if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.ErrorMessage
+    </div>
+}
+
 <h3>Are you sure you want to delete @Model.Name?</h3>
 
 <form asp-controller="Thread" asp-action="Delete" method="post">
+    @Html.Hidden("threadId", Model.Id)
     <button type="submit" class="btn btn-primary">Delete</button>
 </form>

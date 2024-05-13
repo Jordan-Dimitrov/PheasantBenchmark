@@ -7,6 +7,7 @@ namespace PheasantBench.Web.Controllers
 {
     public class ForumMessageController : Controller
     {
+        private const int _Size = 5;
         private readonly IForumMessageService _ForumMessageService;
         private readonly IForumThreadService _ForumThreadService;
 
@@ -25,6 +26,24 @@ namespace PheasantBench.Web.Controllers
         public IActionResult Create()
         {
             return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetMessages([FromQuery] int page, [FromQuery] Guid threadId)
+        {
+            var response = await _ForumMessageService.GetForumMessagesPagedByThread(page, _Size, threadId);
+            var thread = await _ForumThreadService.GetForumThread(threadId);
+
+            if (!response.Success)
+            {
+                ViewBag.ErrorMessage = response.ErrorMessage;
+                return RedirectToAction("Create");
+            }
+
+            ViewBag.PageNumber = page;
+            ViewBag.Description = thread.Data.Description;
+
+            return View(response.Data);
         }
 
         [HttpPost]

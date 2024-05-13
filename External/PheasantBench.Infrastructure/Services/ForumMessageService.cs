@@ -1,12 +1,10 @@
-﻿using Microsoft.AspNet.Identity;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using PheasantBench.Application.Abstractions;
 using PheasantBench.Application.Dtos;
 using PheasantBench.Application.Responses;
 using PheasantBench.Application.ViewModels;
 using PheasantBench.Domain.Abstractions;
 using PheasantBench.Domain.Models;
-using PheasantBench.Infrastructure.Repositories;
 
 namespace PheasantBench.Infrastructure.Services
 {
@@ -47,7 +45,7 @@ namespace PheasantBench.Infrastructure.Services
 
             var fileResponse = await _FileService.UploadAsync(file);
 
-            if(!fileResponse.Success)
+            if (!fileResponse.Success)
             {
                 return fileResponse;
             }
@@ -105,7 +103,7 @@ namespace PheasantBench.Infrastructure.Services
                 return response;
             }
 
-            if(benchmark.FileName is not null)
+            if (benchmark.FileName is not null)
             {
                 var fileResponse = await _FileService.RemoveAsync(benchmark.FileName);
 
@@ -149,9 +147,10 @@ namespace PheasantBench.Infrastructure.Services
             return response;
         }
 
-        public async Task<DataResponse<IEnumerable<ForumMessageDto>>> GetForumMessagesPaged(int page, int size)
+        public async Task<DataResponse<ForumMessagesPagedDto>> GetForumMessagesPaged(int page, int size)
         {
-            DataResponse<IEnumerable<ForumMessageDto>> response = new DataResponse<IEnumerable<ForumMessageDto>>();
+            DataResponse<ForumMessagesPagedDto> response = new DataResponse<ForumMessagesPagedDto>();
+            response.Data = new ForumMessagesPagedDto();
 
             var benchmark = await _ForumMessageRepository.GetPagedAsync(false, page, size);
 
@@ -162,7 +161,7 @@ namespace PheasantBench.Infrastructure.Services
                 return response;
             }
 
-            response.Data = benchmark.Select(x => new ForumMessageDto()
+            response.Data.ForumMessages = benchmark.Select(x => new ForumMessageDto()
             {
                 MessageContent = x.MessageContent,
                 DateCreated = x.DateCreated,
@@ -171,12 +170,15 @@ namespace PheasantBench.Infrastructure.Services
                 UpvoteCount = 0
             });
 
+            response.Data.TotalPages = await _ForumMessageRepository.GetPageCount(size);
+
             return response;
         }
 
-        public async Task<DataResponse<IEnumerable<ForumMessageDto>>> GetForumMessagesPagedByThread(int page, int size, Guid threadId)
+        public async Task<DataResponse<ForumMessagesPagedDto>> GetForumMessagesPagedByThread(int page, int size, Guid threadId)
         {
-            DataResponse<IEnumerable<ForumMessageDto>> response = new DataResponse<IEnumerable<ForumMessageDto>>();
+            DataResponse<ForumMessagesPagedDto> response = new DataResponse<ForumMessagesPagedDto>();
+            response.Data = new ForumMessagesPagedDto();
 
             var benchmark = await _ForumMessageRepository.GetPagedByThreadAsync(page, size, threadId, false);
 
@@ -187,7 +189,7 @@ namespace PheasantBench.Infrastructure.Services
                 return response;
             }
 
-            response.Data = benchmark.Select(x => new ForumMessageDto()
+            response.Data.ForumMessages = benchmark.Select(x => new ForumMessageDto()
             {
                 MessageContent = x.MessageContent,
                 DateCreated = x.DateCreated,
@@ -195,6 +197,8 @@ namespace PheasantBench.Infrastructure.Services
                 ForumThreadId = x.ForumThreadId,
                 UpvoteCount = 0
             });
+
+            response.Data.TotalPages = await _ForumMessageRepository.GetPageCount(size);
 
             return response;
         }

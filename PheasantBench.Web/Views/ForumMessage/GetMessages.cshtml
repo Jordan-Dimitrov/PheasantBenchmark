@@ -1,0 +1,18 @@
+﻿@model PheasantBench.Application.ViewModels.ForumMessagesPagedDto
+
+<h1>@ViewBag.Description</h1>
+
+@foreach (var item in Model.ForumMessages)
+{
+    <h2>@item.MessageContent</h2>
+}
+
+@if (ViewBag.PageNumber > 1)
+{
+    <a href="@Url.Action("GetMessages", new { page = ViewBag.PageNumber - 1, threadId = Model.ForumMessages.First().ForumThreadId})" class="btn btn-primary">Previous</a>
+}
+
+@if (ViewBag.PageNumber < Model.TotalPages || Model.ForumMessages.Count() == 5)
+{
+    <a href="@Url.Action("GetMessages", new { page = ViewBag.PageNumber + 1, threadId = Model.ForumMessages.First().ForumThreadId })" class="btn btn-primary">Next</a>
+}

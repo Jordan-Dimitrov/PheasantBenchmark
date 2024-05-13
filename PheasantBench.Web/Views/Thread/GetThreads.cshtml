@@ -1,11 +1,24 @@
 ﻿@model PheasantBench.Application.ViewModels.ForumThreadPagedDto
 
+@if (!string.IsNullOrEmpty(ViewBag.Success))
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.Success
+    </div>
+}
+
 @foreach (var item in Model.ForumThreads)
 {
-    <h1>@item.Name</h1>
+    <form method="get" asp-controller = "ForumMessage" asp-action="GetMessages" method="post">
+        @Html.Hidden("page", 1)
+        @Html.Hidden("threadId", item.Id)
+        <button type="submit" class="nav-link btn btn-link text-dark">@item.Name</button>
+        @Html.AntiForgeryToken()
+    </form>
+
     @if (User.IsInRole("Admin"))
     {
-        <form method="post" action="@Url.Action("Delete", "Thread")">
+        <form method="post" asp-controller = "Thread" asp-action="Remove" method="get">
             @Html.Hidden("threadId", item.Id)
             <button type="submit" class="btn btn-danger">Delete</button>
             @Html.AntiForgeryToken()

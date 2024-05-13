@@ -1,4 +1,11 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@using PheasantBench.Domain.Enums
+@using PheasantBench.Domain.Models
+@using System.Security.Claims
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -25,6 +32,22 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <li>
+                                <form asp-controller="Thread" asp-action="GetThreads" method="get">
+                                    <button class="nav-link btn btn-link text-dark">Threads</button>
+                                </form>
+                            </li>
+                        }
+                        @if (User.IsInRole(Role.Admin.ToString()))
+                        {
+                            <li>
+                                <form asp-controller="Thread" asp-action="Create" method="get">
+                                    <button class="nav-link btn btn-link text-dark">Create thread</button>
+                                </form>
+                            </li>
+                        }
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
