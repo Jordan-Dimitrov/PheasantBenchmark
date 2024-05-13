@@ -22,11 +22,15 @@ namespace PheasantBench.Infrastructure.Configurations
                 Property("Version")
                 .IsRowVersion();
 
-            builder
-                .HasOne(uv => uv.ForumMessage)
-                .WithMany(fm => fm.UserUpvotes)
-                .HasForeignKey(uv => uv.ForumMessageId)
+            builder.HasOne(u => u.User)
+                .WithMany(u => u.UserUpvotes)
+                .HasForeignKey(u => u.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(u => u.ForumMessage)
+                .WithMany(fm => fm.UserUpvotes)
+                .HasForeignKey(u => u.ForumMessageId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

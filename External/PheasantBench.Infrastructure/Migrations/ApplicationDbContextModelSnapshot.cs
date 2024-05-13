@@ -454,13 +454,13 @@ namespace PheasantBench.Infrastructure.Migrations
                     b.HasOne("PheasantBench.Domain.Models.ForumMessage", "ForumMessage")
                         .WithMany("UserUpvotes")
                         .HasForeignKey("ForumMessageId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("PheasantBench.Domain.Models.User", "User")
                         .WithMany("UserUpvotes")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("ForumMessage");

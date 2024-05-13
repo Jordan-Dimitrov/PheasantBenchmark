@@ -12,8 +12,8 @@ using PheasantBench.Infrastructure;
 namespace PheasantBench.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240507175518_MinorFixesaa")]
-    partial class MinorFixesaa
+    [Migration("20240513171257_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -457,13 +457,13 @@ namespace PheasantBench.Infrastructure.Migrations
                     b.HasOne("PheasantBench.Domain.Models.ForumMessage", "ForumMessage")
                         .WithMany("UserUpvotes")
                         .HasForeignKey("ForumMessageId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("PheasantBench.Domain.Models.User", "User")
                         .WithMany("UserUpvotes")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("ForumMessage");
