@@ -2,6 +2,7 @@
 {
     public class ForumMessageDto
     {
+        public Guid Id { get; set; }
         public string MessageContent { get; set; }
         public string? FileName { get; set; }
         public DateTime DateCreated { get; set; }

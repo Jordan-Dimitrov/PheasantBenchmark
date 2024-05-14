@@ -1,6 +1,16 @@
 ﻿@model PheasantBench.Application.Dtos.CreateForumMessageDto
-<form asp-controller="ForumMessage" asp-action="Create" method="post">
-    <input asp-for="@Model.MessageContent" />
-    <input asp-for="@Model.ForumThreadId" />
-    <button >submit</button>
-</form>
+
+<div class="container">
+    <h1>Create Forum Message</h1>
+    <form asp-controller="ForumMessage" asp-action="Create" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="MessageContent">Message Content:</label>
+            <input type="text" class="form-control" id="MessageContent" name="MessageContent" asp-for="@Model.MessageContent" />
+        </div>
+        @if(ViewBag.ThreadId is not null)
+        {
+            @Html.Hidden("ForumThreadId", (Guid)ViewBag.ThreadId)
+        }
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>

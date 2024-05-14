@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using PheasantBench.Application.Abstractions;
+﻿using PheasantBench.Application.Abstractions;
 using PheasantBench.Application.Dtos;
 using PheasantBench.Application.Responses;
 using PheasantBench.Application.ViewModels;
@@ -13,18 +12,23 @@ namespace PheasantBench.Infrastructure.Services
         private readonly IForumMessageRepository _ForumMessageRepository;
         private readonly IFileService _FileService;
         private readonly IUserRepository _UserRepository;
+        private readonly IForumThreadRepository _ForumThreadRepository;
         public ForumMessageService(IForumMessageRepository forumMessageRepository,
-            IFileService fileService, IUserRepository userRepository)
+            IFileService fileService, IUserRepository userRepository,
+            IForumThreadRepository forumThreadRepository)
         {
             _ForumMessageRepository = forumMessageRepository;
             _FileService = fileService;
             _UserRepository = userRepository;
+            _ForumThreadRepository = forumThreadRepository;
         }
-        public async Task<Response> CreateForumMessageWithFile(CreateForumMessageDto benchmark, string userId, IFormFile file)
+        public async Task<Response> CreateForumMessage(CreateForumMessageDto benchmark, string userId)
         {
             Response response = new Response();
 
             var user = await _UserRepository.GetByIdAsync(Guid.Parse(userId), true);
+
+            var thread = await _ForumThreadRepository.GetByIdAsync(benchmark.ForumThreadId, true);
 
             if (user is null)
             {
@@ -33,42 +37,10 @@ namespace PheasantBench.Infrastructure.Services
                 return response;
             }
 
-            ForumMessage forumMessage = new ForumMessage()
-            {
-                MessageContent = benchmark.MessageContent,
-                DateCreated = DateTime.UtcNow,
-                FileName = file.FileName,
-                ForumThreadId = benchmark.ForumThreadId,
-                UpvoteCount = 0,
-                User = user
-            };
-
-            var fileResponse = await _FileService.UploadAsync(file);
-
-            if (!fileResponse.Success)
-            {
-                return fileResponse;
-            }
-
-            if (!await _ForumMessageRepository.InsertAsync(forumMessage))
+            if (thread is null)
             {
                 response.Success = false;
-                response.ErrorMessage = "Unexpected error";
-            }
-
-            return new Response();
-        }
-
-        public async Task<Response> CreateForumMessage(CreateForumMessageDto benchmark, string userId)
-        {
-            Response response = new Response();
-
-            var user = await _UserRepository.GetByIdAsync(Guid.Parse(userId), true);
-
-            if (user is null)
-            {
-                response.Success = false;
-                response.ErrorMessage = "User not found";
+                response.ErrorMessage = "Thread not found";
                 return response;
             }
 
@@ -137,6 +109,7 @@ namespace PheasantBench.Infrastructure.Services
 
             response.Data = new ForumMessageDto()
             {
+                Id = benchmark.Id,
                 MessageContent = benchmark.MessageContent,
                 DateCreated = DateTime.UtcNow,
                 FileName = benchmark.FileName,
@@ -163,6 +136,7 @@ namespace PheasantBench.Infrastructure.Services
 
             response.Data.ForumMessages = benchmark.Select(x => new ForumMessageDto()
             {
+                Id = x.Id,
                 MessageContent = x.MessageContent,
                 DateCreated = x.DateCreated,
                 FileName = x.FileName,
@@ -191,6 +165,7 @@ namespace PheasantBench.Infrastructure.Services
 
             response.Data.ForumMessages = benchmark.Select(x => new ForumMessageDto()
             {
+                Id = x.Id,
                 MessageContent = x.MessageContent,
                 DateCreated = x.DateCreated,
                 FileName = x.FileName,

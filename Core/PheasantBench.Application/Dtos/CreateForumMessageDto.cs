@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 
 namespace PheasantBench.Application.Dtos
 {
@@ -9,5 +10,6 @@ namespace PheasantBench.Application.Dtos
         public string MessageContent { get; set; }
         [Required]
         public Guid ForumThreadId { get; set; }
+        public IFormFile? File { get; set; }
     }
 }

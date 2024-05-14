@@ -2,9 +2,36 @@
 
 <h1>@ViewBag.Description</h1>
 
+@if (!string.IsNullOrEmpty(ViewBag.Success))
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.Success
+    </div>
+}
+
+
+@if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.ErrorMessage
+    </div>
+}
+
 @foreach (var item in Model.ForumMessages)
 {
     <h2>@item.MessageContent</h2>
+    @if(item.FileName is not null && item.FileName != "")
+    {
+        <img src="@Url.Content(item.FileName)" alt="@Url.Content(item.FileName)" runat="server" />
+    }
+    @if (User.IsInRole("Admin"))
+    {
+        <form method="post" asp-controller="ForumMessage" asp-action="Remove" method="get">
+            @Html.Hidden("forumMessageId", item.Id)
+            <button type="submit" class="btn btn-danger">Delete</button>
+            @Html.AntiForgeryToken()
+        </form>
+    }
 }
 
 @if (ViewBag.PageNumber > 1)
@@ -16,3 +43,19 @@
 {
     <a href="@Url.Action("GetMessages", new { page = ViewBag.PageNumber + 1, threadId = Model.ForumMessages.First().ForumThreadId })" class="btn btn-primary">Next</a>
 }
+
+<div class="container">
+    <h4>Create Forum Message</h4>
+    <form asp-controller="ForumMessage" asp-action="Create" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="MessageContent">Message Content:</label>
+            <input type="text" class="form-control" id="MessageContent" name="MessageContent" />
+        </div>
+
+        @if (ViewBag.ThreadId is not null)
+        {
+            @Html.Hidden("ForumThreadId", (Guid)ViewBag.ThreadId)
+        }
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>

@@ -13,7 +13,7 @@ namespace PheasantBench.Infrastructure.Services
         {
             _SupportedImageMimeTypes = new List<string>() { "image/webp", "image/png", "image/jpg", "image/jpeg" };
 
-            _UploadsDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Media");
+            _UploadsDirectory = "~/images/";
 
             if (!Directory.Exists(_UploadsDirectory))
             {
@@ -91,9 +91,9 @@ namespace PheasantBench.Infrastructure.Services
             return response;
         }
 
-        public async Task<Response> UploadAsync(IFormFile file)
+        public async Task<DataResponse<string>> UploadAsync(IFormFile file)
         {
-            Response response = new Response();
+            DataResponse<string> response = new DataResponse<string>();
             response.Success = false;
             response.ErrorMessage = "Invalid path";
 
@@ -115,6 +115,7 @@ namespace PheasantBench.Infrastructure.Services
 
             response.Success = true;
             response.ErrorMessage = string.Empty;
+            response.Data = filePath;
 
             return response;
         }

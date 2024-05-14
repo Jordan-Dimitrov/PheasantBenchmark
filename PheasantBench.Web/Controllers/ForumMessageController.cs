@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PheasantBench.Application.Abstractions;
 using PheasantBench.Application.Dtos;
@@ -23,12 +24,49 @@ namespace PheasantBench.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create()
+        [Authorize]
+        public IActionResult Create([FromQuery] Guid threadId)
         {
+            ViewBag.threadId = threadId;
+
             return View();
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Remove(Guid forumMessageId)
+        {
+            var response = await _ForumMessageService.GetBForumMessage(forumMessageId);
+
+            if (!response.Success)
+            {
+                ViewBag.ErrorMessage = response.ErrorMessage;
+                return View();
+            }
+
+            return View(response.Data);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(Guid forumMessageId)
+        {
+            var response = await _ForumMessageService.DeleteForumMessage(forumMessageId);
+
+            if (!response.Success)
+            {
+                ViewBag.ErrorMessage = response.ErrorMessage;
+                return RedirectToAction("Remove");
+            }
+
+            ViewBag.Success = "Removed successfully";
+
+            return RedirectToAction("GetThreads", "Thread");
+        }
+
+        [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetMessages([FromQuery] int page, [FromQuery] Guid threadId)
         {
             var response = await _ForumMessageService.GetForumMessagesPagedByThread(page, _Size, threadId);
@@ -37,16 +75,18 @@ namespace PheasantBench.Web.Controllers
             if (!response.Success)
             {
                 ViewBag.ErrorMessage = response.ErrorMessage;
-                return RedirectToAction("Create");
+                return View();
             }
 
             ViewBag.PageNumber = page;
             ViewBag.Description = thread.Data.Description;
+            ViewBag.ThreadId = threadId;
 
             return View(response.Data);
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Create(CreateForumMessageDto dto)
         {
             if (!ModelState.IsValid)
@@ -65,7 +105,7 @@ namespace PheasantBench.Web.Controllers
 
             ViewBag.Success = "Successfuly created";
 
-            return View();
+            return RedirectToAction("GetMessages", new { page = 1, threadId = dto.ForumThreadId });
         }
 
     }
