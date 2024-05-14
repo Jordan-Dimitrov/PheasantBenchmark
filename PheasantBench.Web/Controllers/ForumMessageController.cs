@@ -63,7 +63,7 @@ namespace PheasantBench.Web.Controllers
             if (!response.Success)
             {
                 TempData["ErrorMessage"] = response.ErrorMessage;
-                return View();
+                return RedirectToAction("Error");
             }
 
             return View(response.Data);
@@ -79,7 +79,7 @@ namespace PheasantBench.Web.Controllers
             if (!response.Success)
             {
                 TempData["ErrorMessage"] = response.ErrorMessage;
-                return RedirectToAction("Remove");
+                return RedirectToAction("Error");
             }
 
             ViewBag.Success = "Removed successfully";

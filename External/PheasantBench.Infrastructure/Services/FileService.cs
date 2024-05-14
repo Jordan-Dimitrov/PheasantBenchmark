@@ -115,7 +115,7 @@ namespace PheasantBench.Infrastructure.Services
 
             response.Success = true;
             response.ErrorMessage = string.Empty;
-            response.Data = "~/uploads/" + fileName;
+            response.Data = fileName;
 
             return response;
         }

@@ -18,6 +18,7 @@
     <h3>Are you sure you want to delete @Model.Name?</h3>
     <form asp-controller="Thread" asp-action="Delete" method="post">
         @Html.Hidden("threadId", Model.Id)
+        @Html.AntiForgeryToken()
         <button type="submit" class="btn btn-primary">Delete</button>
     </form>
 }

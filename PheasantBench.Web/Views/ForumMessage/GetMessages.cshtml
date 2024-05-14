@@ -1,5 +1,9 @@
 ﻿@model PheasantBench.Application.ViewModels.ForumMessagesPagedDto
 
+@{
+    ViewData["Title"] = "Messages";
+}
+
 <h1>@ViewBag.Description</h1>
 
 @if (!string.IsNullOrEmpty(ViewBag.Success))
@@ -8,14 +12,15 @@
         @ViewBag.Success
     </div>
 }
+<br />
 
 @foreach (var item in Model.ForumMessages)
 {
     <div>
-        <h2>@item.MessageContent</h2>
+        <h4>@item.MessageContent</h4>
         @if (item.FileName is not null && item.FileName != "")
         {
-            <img src="@Url.Content(item.FileName)" alt="@Url.Content(item.FileName)" class="capped-image" />
+            <img src="@Url.Content($"~/uploads/{item.FileName}")" alt="@Url.Content($"~/uploads/{item.FileName}")" class="capped-image" />
         }
 
         <div>
@@ -42,6 +47,7 @@
             </form>
         </div>
     </div>
+    <br />
 }
 
 @if (ViewBag.PageNumber > 1)
@@ -66,6 +72,7 @@
             <label for="FileUpload">Upload File:</label>
             <input type="file" class="form-control-file" id="File" name="File" />
         </div>
+        @Html.AntiForgeryToken()
 
         @if (ViewBag.ThreadId is not null)
         {
