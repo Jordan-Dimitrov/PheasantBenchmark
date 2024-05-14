@@ -6,12 +6,6 @@
 
 <h1>Delete Forum Message</h1>
 
-@if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
-{
-    <div class="alert alert-danger" role="alert">
-        @ViewBag.ErrorMessage
-    </div>
-}
 @if(Model is not null)
 {
     <h3>Are you sure you want to delete @Model.MessageContent?</h3>

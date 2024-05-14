@@ -21,6 +21,7 @@ namespace PheasantBench.Infrastructure.Services
         public async Task<DataResponse<Guid>> UpvoteAsync(Guid forumMessageId, string userId, CreateUserUpvoteDto value)
         {
             DataResponse<Guid> response = new DataResponse<Guid>();
+
             response.Success = false;
 
             var user = await _UserRepository.GetByIdAsync(Guid.Parse(userId), true);

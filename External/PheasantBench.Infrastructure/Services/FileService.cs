@@ -13,7 +13,7 @@ namespace PheasantBench.Infrastructure.Services
         {
             _SupportedImageMimeTypes = new List<string>() { "image/webp", "image/png", "image/jpg", "image/jpeg" };
 
-            _UploadsDirectory = "~/images/";
+            _UploadsDirectory = "wwwroot/uploads";
 
             if (!Directory.Exists(_UploadsDirectory))
             {
@@ -100,7 +100,7 @@ namespace PheasantBench.Infrastructure.Services
             string fileName = Path.GetFileName(file.FileName);
             string fileExtension = Path.GetExtension(fileName).ToLowerInvariant();
 
-            string filePath = Path.Combine(_UploadsDirectory, fileName);
+            string filePath = $"{_UploadsDirectory}/{fileName}";
 
             if (File.Exists(filePath))
             {
@@ -115,7 +115,7 @@ namespace PheasantBench.Infrastructure.Services
 
             response.Success = true;
             response.ErrorMessage = string.Empty;
-            response.Data = filePath;
+            response.Data = "~/uploads/" + fileName;
 
             return response;
         }

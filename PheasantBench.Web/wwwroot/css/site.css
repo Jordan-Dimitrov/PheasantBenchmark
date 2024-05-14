@@ -12,6 +12,13 @@ html {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
+.capped-image {
+    max-width: 480px; 
+    max-height: 360px; 
+    width: auto; 
+    height: auto;
+}
+
 html {
   position: relative;
   min-height: 100%;

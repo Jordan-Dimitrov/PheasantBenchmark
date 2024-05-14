@@ -46,8 +46,8 @@ namespace PheasantBench.Web.Controllers
 
             if (!response.Success)
             {
-                ViewBag.ErrorMessage = response.ErrorMessage;
-                return RedirectToAction("GetMessages", new { page = 1, threadId = response.Data });
+                TempData["ErrorMessage"] = response.ErrorMessage;
+                return RedirectToAction("Error");
             }
 
             ViewBag.Success = "Addedd successfully";
@@ -62,7 +62,7 @@ namespace PheasantBench.Web.Controllers
 
             if (!response.Success)
             {
-                ViewBag.ErrorMessage = response.ErrorMessage;
+                TempData["ErrorMessage"] = response.ErrorMessage;
                 return View();
             }
 
@@ -78,13 +78,22 @@ namespace PheasantBench.Web.Controllers
 
             if (!response.Success)
             {
-                ViewBag.ErrorMessage = response.ErrorMessage;
+                TempData["ErrorMessage"] = response.ErrorMessage;
                 return RedirectToAction("Remove");
             }
 
             ViewBag.Success = "Removed successfully";
 
             return RedirectToAction("GetMessages", new { page = 1, threadId = response.Data });
+        }
+
+        public IActionResult Error()
+        {
+            string errorMessage = (string)TempData["ErrorMessage"];
+
+            ViewBag.ErrorMessage = errorMessage;
+
+            return View();
         }
 
         [HttpGet]
@@ -96,14 +105,14 @@ namespace PheasantBench.Web.Controllers
 
             if(!thread.Success)
             {
-                ViewBag.ErrorMessage = thread.ErrorMessage;
-                return View();
+                TempData["ErrorMessage"] = thread.ErrorMessage;
+                return RedirectToAction("Error");
             }
 
             if (!response.Success)
             {
-                ViewBag.ErrorMessage = response.ErrorMessage;
-                return View();
+                TempData["ErrorMessage"] = response.ErrorMessage;
+                return RedirectToAction("Error");
             }
 
             ViewBag.PageNumber = page;
@@ -119,16 +128,16 @@ namespace PheasantBench.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ViewBag.ErrorMessage = "Invalid data";
-                return View();
+                TempData["ErrorMessage"] = "Invalid data!";
+                return View("Error");
             }
 
             var response = await _ForumMessageService.CreateForumMessage(dto, User.Identity.GetUserId());
 
             if (!response.Success)
             {
-                ViewBag.ErrorMessage = response.ErrorMessage;
-                return View();
+                TempData["ErrorMessage"] = response.ErrorMessage;
+                return View("Error");
             }
 
             ViewBag.Success = "Successfuly created";

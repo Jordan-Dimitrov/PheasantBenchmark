@@ -53,6 +53,18 @@ namespace PheasantBench.Infrastructure.Services
                 User = user
             };
 
+            if(benchmark.File is not null)
+            {
+                var fileResponse = await _FileService.UploadAsync(benchmark.File);
+
+                if (!fileResponse.Success)
+                {
+                    return fileResponse;
+                }
+
+                forumMessage.FileName = fileResponse.Data;
+            }
+
             if (!await _ForumMessageRepository.InsertAsync(forumMessage))
             {
                 response.Success = false;

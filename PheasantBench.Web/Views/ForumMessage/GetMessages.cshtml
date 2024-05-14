@@ -9,21 +9,15 @@
     </div>
 }
 
-@if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
-{
-    <div class="alert alert-danger" role="alert">
-        @ViewBag.ErrorMessage
-    </div>
-}
-
 @foreach (var item in Model.ForumMessages)
 {
     <div>
         <h2>@item.MessageContent</h2>
         @if (item.FileName is not null && item.FileName != "")
         {
-            <img src="@Url.Content(item.FileName)" alt="@Url.Content(item.FileName)" />
+            <img src="@Url.Content(item.FileName)" alt="@Url.Content(item.FileName)" class="capped-image" />
         }
+
         <div>
             <span>Upvotes: @item.UpvoteCount</span>
             @if (User.IsInRole("Admin"))
@@ -66,6 +60,11 @@
         <div class="form-group">
             <label for="MessageContent">Message Content:</label>
             <input type="text" class="form-control" id="MessageContent" name="MessageContent" />
+        </div>
+
+        <div class="form-group">
+            <label for="FileUpload">Upload File:</label>
+            <input type="file" class="form-control-file" id="File" name="File" />
         </div>
 
         @if (ViewBag.ThreadId is not null)
