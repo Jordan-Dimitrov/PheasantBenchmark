@@ -18,9 +18,9 @@ namespace PheasantBench.Infrastructure.Services
             _UserRepository = userRepository;
             _UserUpvoteRepository = userUpvoteRepository;
         }
-        public async Task<Response> UpvoteAsync(Guid forumMessageId, string userId, CreateUserUpvoteDto value)
+        public async Task<DataResponse<Guid>> UpvoteAsync(Guid forumMessageId, string userId, CreateUserUpvoteDto value)
         {
-            Response response = new Response();
+            DataResponse<Guid> response = new DataResponse<Guid>();
             response.Success = false;
 
             var user = await _UserRepository.GetByIdAsync(Guid.Parse(userId), true);
@@ -62,16 +62,18 @@ namespace PheasantBench.Infrastructure.Services
                 }
 
                 response.Success = true;
+                response.Data = upvoteToAdd.ForumMessage.ForumThreadId;
                 return response;
             }
 
             if (upvote.Rating == value.Score)
             {
                 response.Success = true;
+                response.Data = upvote.ForumMessage.ForumThreadId;
                 return response;
             }
 
-            forumMessage.UpvoteCount -= upvote.Rating;
+            forumMessage.UpvoteCount -= upvote.Rating == 0 ? -1 : 1;
             forumMessage.UpvoteCount += value.Score == 0 ? -1 : 1;
             upvote.Rating = value.Score;
 
@@ -82,6 +84,7 @@ namespace PheasantBench.Infrastructure.Services
                 return response;
             }
 
+            response.Data = upvote.ForumMessage.ForumThreadId;
             response.Success = true;
             return response;
         }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using Humanizer;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PheasantBench.Application.Abstractions;
@@ -46,11 +47,11 @@ namespace PheasantBench.Web.Controllers
             if (!response.Success)
             {
                 ViewBag.ErrorMessage = response.ErrorMessage;
-                return RedirectToAction("GetThreads", "Thread");
+                return RedirectToAction("GetMessages", new { page = 1, threadId = response.Data });
             }
 
             ViewBag.Success = "Addedd successfully";
-            return RedirectToAction("GetThreads", "Thread");
+            return RedirectToAction("GetMessages", new { page = 1, threadId = response.Data });
         }
 
         [HttpGet]
@@ -83,7 +84,7 @@ namespace PheasantBench.Web.Controllers
 
             ViewBag.Success = "Removed successfully";
 
-            return RedirectToAction("GetThreads", "Thread");
+            return RedirectToAction("GetMessages", new { page = 1, threadId = response.Data });
         }
 
         [HttpGet]
@@ -92,6 +93,12 @@ namespace PheasantBench.Web.Controllers
         {
             var response = await _ForumMessageService.GetForumMessagesPagedByThread(page, _Size, threadId);
             var thread = await _ForumThreadService.GetForumThread(threadId);
+
+            if(!thread.Success)
+            {
+                ViewBag.ErrorMessage = thread.ErrorMessage;
+                return View();
+            }
 
             if (!response.Success)
             {

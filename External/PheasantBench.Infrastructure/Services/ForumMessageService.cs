@@ -62,9 +62,9 @@ namespace PheasantBench.Infrastructure.Services
             return new Response();
         }
 
-        public async Task<Response> DeleteForumMessage(Guid id)
+        public async Task<DataResponse<Guid>> DeleteForumMessage(Guid id)
         {
-            Response response = new Response();
+            DataResponse<Guid> response = new DataResponse<Guid>();
 
             ForumMessage? benchmark = await _ForumMessageRepository.GetByIdAsync(id, true);
 
@@ -81,7 +81,7 @@ namespace PheasantBench.Infrastructure.Services
 
                 if (!fileResponse.Success)
                 {
-                    return fileResponse;
+                    return response;
                 }
             }
 
@@ -90,6 +90,8 @@ namespace PheasantBench.Infrastructure.Services
                 response.Success = false;
                 response.ErrorMessage = "Unexpected error";
             }
+
+            response.Data = benchmark.ForumThreadId;
 
             return response;
         }

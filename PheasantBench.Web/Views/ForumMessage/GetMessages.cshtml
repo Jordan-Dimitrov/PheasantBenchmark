@@ -43,7 +43,7 @@
             <form method="post" asp-controller="ForumMessage" asp-action="Upvote">
                 @Html.Hidden("messageId", item.Id)
                 <input type="hidden" name="score" value="0" />
-                <button type="submit" class="btn btn-primary">>Downvote</button>
+                <button type="submit" class="btn btn-primary">Downvote</button>
                 @Html.AntiForgeryToken()
             </form>
         </div>
