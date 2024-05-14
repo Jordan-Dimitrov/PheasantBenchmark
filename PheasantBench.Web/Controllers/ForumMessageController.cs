@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PheasantBench.Application.Abstractions;
 using PheasantBench.Application.Dtos;
+using PheasantBench.Domain.Models;
+using PheasantBench.Infrastructure.Services;
 
 namespace PheasantBench.Web.Controllers
 {
@@ -11,12 +13,15 @@ namespace PheasantBench.Web.Controllers
         private const int _Size = 5;
         private readonly IForumMessageService _ForumMessageService;
         private readonly IForumThreadService _ForumThreadService;
+        private readonly IUserUpvoteService _UserUpvoteService;
 
         public ForumMessageController(IForumMessageService forumMessageService,
-            IForumThreadService forumThreadService)
+            IForumThreadService forumThreadService,
+            IUserUpvoteService userUpvoteService)
         {
             _ForumMessageService = forumMessageService;
             _ForumThreadService = forumThreadService;
+            _UserUpvoteService = userUpvoteService;
         }
         public IActionResult Index()
         {
@@ -30,6 +35,22 @@ namespace PheasantBench.Web.Controllers
             ViewBag.threadId = threadId;
 
             return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Upvote(Guid messageId, byte score)
+        {
+            var response = await _UserUpvoteService
+                .UpvoteAsync(messageId, User.Identity.GetUserId(), new CreateUserUpvoteDto { Score = score });
+
+            if (!response.Success)
+            {
+                ViewBag.ErrorMessage = response.ErrorMessage;
+                return RedirectToAction("GetThreads", "Thread");
+            }
+
+            ViewBag.Success = "Addedd successfully";
+            return RedirectToAction("GetThreads", "Thread");
         }
 
         [HttpGet]

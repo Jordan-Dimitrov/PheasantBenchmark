@@ -114,7 +114,7 @@ namespace PheasantBench.Infrastructure.Services
                 DateCreated = DateTime.UtcNow,
                 FileName = benchmark.FileName,
                 ForumThreadId = benchmark.ForumThreadId,
-                UpvoteCount = 0,
+                UpvoteCount = benchmark.UpvoteCount
             };
 
             return response;
@@ -141,7 +141,7 @@ namespace PheasantBench.Infrastructure.Services
                 DateCreated = x.DateCreated,
                 FileName = x.FileName,
                 ForumThreadId = x.ForumThreadId,
-                UpvoteCount = 0
+                UpvoteCount = x.UpvoteCount
             });
 
             response.Data.TotalPages = await _ForumMessageRepository.GetPageCount(size);
@@ -170,7 +170,7 @@ namespace PheasantBench.Infrastructure.Services
                 DateCreated = x.DateCreated,
                 FileName = x.FileName,
                 ForumThreadId = x.ForumThreadId,
-                UpvoteCount = 0
+                UpvoteCount = x.UpvoteCount
             });
 
             response.Data.TotalPages = await _ForumMessageRepository.GetPageCount(size);

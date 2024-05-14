@@ -4,11 +4,10 @@
 
 @if (!string.IsNullOrEmpty(ViewBag.Success))
 {
-    <div class="alert alert-danger" role="alert">
+    <div class="alert alert-success" role="alert">
         @ViewBag.Success
     </div>
 }
-
 
 @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
 {
@@ -19,19 +18,36 @@
 
 @foreach (var item in Model.ForumMessages)
 {
-    <h2>@item.MessageContent</h2>
-    @if(item.FileName is not null && item.FileName != "")
-    {
-        <img src="@Url.Content(item.FileName)" alt="@Url.Content(item.FileName)" runat="server" />
-    }
-    @if (User.IsInRole("Admin"))
-    {
-        <form method="post" asp-controller="ForumMessage" asp-action="Remove" method="get">
-            @Html.Hidden("forumMessageId", item.Id)
-            <button type="submit" class="btn btn-danger">Delete</button>
-            @Html.AntiForgeryToken()
-        </form>
-    }
+    <div>
+        <h2>@item.MessageContent</h2>
+        @if (item.FileName is not null && item.FileName != "")
+        {
+            <img src="@Url.Content(item.FileName)" alt="@Url.Content(item.FileName)" />
+        }
+        <div>
+            <span>Upvotes: @item.UpvoteCount</span>
+            @if (User.IsInRole("Admin"))
+            {
+                <form method="post" asp-controller="ForumMessage" asp-action="Remove" method="get">
+                    @Html.Hidden("forumMessageId", item.Id)
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                    @Html.AntiForgeryToken()
+                </form>
+            }
+            <form method="post" asp-controller="ForumMessage" asp-action="Upvote">
+                @Html.Hidden("messageId", item.Id)
+                <input type="hidden" name="score" value="1" />
+                <button type="submit" class="btn btn-primary">Upvote</button>
+                @Html.AntiForgeryToken()
+            </form>
+            <form method="post" asp-controller="ForumMessage" asp-action="Upvote">
+                @Html.Hidden("messageId", item.Id)
+                <input type="hidden" name="score" value="0" />
+                <button type="submit" class="btn btn-primary">>Downvote</button>
+                @Html.AntiForgeryToken()
+            </form>
+        </div>
+    </div>
 }
 
 @if (ViewBag.PageNumber > 1)

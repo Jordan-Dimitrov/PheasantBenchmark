@@ -11,6 +11,6 @@ namespace PheasantBench.Application.Abstractions
 {
     public interface IUserUpvoteService
     {
-        Task<Response> UpvoteAsync(ForumMessage forumMessage, User user, CreateUserUpvoteDto value);
+        Task<Response> UpvoteAsync(Guid forumMessageId, string userId, CreateUserUpvoteDto value);
     }
 }

@@ -18,12 +18,15 @@ namespace PheasantBench.Infrastructure.Services
             _UserRepository = userRepository;
             _UserUpvoteRepository = userUpvoteRepository;
         }
-        public async Task<Response> UpvoteAsync(ForumMessage forumMessage, User user, CreateUserUpvoteDto value)
+        public async Task<Response> UpvoteAsync(Guid forumMessageId, string userId, CreateUserUpvoteDto value)
         {
             Response response = new Response();
             response.Success = false;
 
-            if (value.Score != 1 && value.Score != -1 && value.Score != 0)
+            var user = await _UserRepository.GetByIdAsync(Guid.Parse(userId), true);
+            var forumMessage = await _ForumMessageRepository.GetByIdAsync(forumMessageId, true);
+
+            if (value.Score != 1 && value.Score != 0)
             {
                 response.ErrorMessage = "Invalid value";
                 return response;
@@ -50,7 +53,7 @@ namespace PheasantBench.Infrastructure.Services
                 upvoteToAdd.Rating = value.Score;
                 upvoteToAdd.ForumMessage = forumMessage;
                 upvoteToAdd.User = user;
-                forumMessage.UpvoteCount += value.Score;
+                forumMessage.UpvoteCount += value.Score == 0 ? -1 : 1;
 
                 if (!await _UserUpvoteRepository.InsertAsync(upvoteToAdd))
                 {
@@ -69,7 +72,7 @@ namespace PheasantBench.Infrastructure.Services
             }
 
             forumMessage.UpvoteCount -= upvote.Rating;
-            forumMessage.UpvoteCount += value.Score;
+            forumMessage.UpvoteCount += value.Score == 0 ? -1 : 1;
             upvote.Rating = value.Score;
 
             if (!await _UserUpvoteRepository.UpdateAsync(upvote)
