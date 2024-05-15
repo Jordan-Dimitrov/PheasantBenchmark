@@ -119,5 +119,42 @@ namespace PheasantBench.Infrastructure.Services
 
             return response;
         }
+
+        public async Task<DataResponse<FileContentResult>> DownloadBenchmark()
+        {
+            string solutionDir = Path.GetDirectoryName(Path.GetDirectoryName(System.IO.Directory.GetCurrentDirectory()) + "/PheasantBenchmark");
+            string relativePath = Path.Combine(solutionDir, "PheasantBench.App", "bin", "Debug", "net8.0-windows");
+
+            DataResponse<FileContentResult> response = new DataResponse<FileContentResult>();
+            response.Success = false;
+            response.ErrorMessage = "Invalid path";
+
+            try
+            {
+                if (File.Exists(relativePath))
+                {
+                    string contentType = "application/octet-stream";
+                    byte[] fileBytes = await File.ReadAllBytesAsync(relativePath);
+
+                    response.Data = new FileContentResult(fileBytes, contentType);
+                    response.Success = true;
+
+                    response.Data = new FileContentResult(fileBytes, contentType)
+                    {
+                        FileDownloadName = "PheasantBench.App.exe"
+                    };
+
+                    response.ErrorMessage = string.Empty;
+
+                    return response;
+                }
+
+                return response;
+            }
+            catch
+            {
+                return response;
+            }
+        }
     }
 }

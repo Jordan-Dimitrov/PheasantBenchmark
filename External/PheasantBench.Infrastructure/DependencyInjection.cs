@@ -30,6 +30,8 @@ namespace PheasantBench.Infrastructure
             services.AddScoped<IForumThreadService, ForumThreadService>();
             services.AddScoped<IForumMessageService, ForumMessageService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IBenchmarkService, BenchmarkService>();
 
             return services;
         }

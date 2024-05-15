@@ -105,9 +105,9 @@ namespace PheasantBench.Infrastructure.Services
             return response;
         }
 
-        public async Task<DataResponse<IEnumerable<BenchmarkDto>>> GetBenchmarksPaged(int page, int size)
+        public async Task<DataResponse<BencmarksPagedDto>> GetBenchmarksPaged(int page, int size)
         {
-            DataResponse<IEnumerable<BenchmarkDto>> response = new DataResponse<IEnumerable<BenchmarkDto>>();
+            DataResponse<BencmarksPagedDto> response = new DataResponse<BencmarksPagedDto>();
 
             var benchmark = await _BenchmarkRepository.GetPagedAsync(false, page, size);
 
@@ -118,7 +118,7 @@ namespace PheasantBench.Infrastructure.Services
                 return response;
             }
 
-            response.Data = benchmark.Select(x => new BenchmarkDto()
+            response.Data.BenchmarkDtos = benchmark.Select(x => new BenchmarkDto()
             {
                 Architecture = x.Architecture,
                 DateCreated = x.DateCreated,
@@ -131,6 +131,8 @@ namespace PheasantBench.Infrastructure.Services
                     Name = x.User.UserName,
                 }
             });
+
+            response.Data.TotalPages = await _BenchmarkRepository.GetPageCount(size);
 
             return response;
         }
