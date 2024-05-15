@@ -123,7 +123,7 @@ namespace PheasantBench.Infrastructure.Services
         public async Task<DataResponse<FileContentResult>> DownloadBenchmark()
         {
             string solutionDir = Path.GetDirectoryName(Path.GetDirectoryName(System.IO.Directory.GetCurrentDirectory()) + "/PheasantBenchmark");
-            string relativePath = Path.Combine(solutionDir, "PheasantBench.App", "bin", "Debug", "net8.0-windows");
+            string relativePath = Path.Combine(solutionDir, "PheasantBench.App", "bin", "Debug", "net8.0-windows.zip");
 
             DataResponse<FileContentResult> response = new DataResponse<FileContentResult>();
             response.Success = false;
@@ -141,7 +141,7 @@ namespace PheasantBench.Infrastructure.Services
 
                     response.Data = new FileContentResult(fileBytes, contentType)
                     {
-                        FileDownloadName = "PheasantBench.App.exe"
+                        FileDownloadName = "PheasantBench.zip"
                     };
 
                     response.ErrorMessage = string.Empty;
