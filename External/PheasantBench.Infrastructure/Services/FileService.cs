@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PheasantBench.Application.Abstractions;
 using PheasantBench.Application.Responses;
+using System.IO.Compression;
 
 namespace PheasantBench.Infrastructure.Services
 {
@@ -120,39 +121,73 @@ namespace PheasantBench.Infrastructure.Services
             return response;
         }
 
-        public async Task<DataResponse<FileContentResult>> DownloadBenchmark()
+        public async Task<DataResponse<FileContentResult>> DownloadBenchmark(string token)
         {
-            string solutionDir = Path.GetDirectoryName(Path.GetDirectoryName(System.IO.Directory.GetCurrentDirectory()) + "/PheasantBenchmark");
-            string relativePath = Path.Combine(solutionDir, "PheasantBench.App", "bin", "Debug", "net8.0-windows.zip");
+            string solutionDir = Path.GetDirectoryName(Path.GetDirectoryName(Directory.GetCurrentDirectory()) + "/PheasantBenchmark");
+            string binDir = Path.Combine(solutionDir, "PheasantBench.App", "bin", "Debug", "net8.0-windows");
+            string textFilePath = Path.Combine(binDir, "token.txt");
+            string zipFilePath = Path.Combine(binDir, "PheasantBench.zip");
 
-            DataResponse<FileContentResult> response = new DataResponse<FileContentResult>();
-            response.Success = false;
-            response.ErrorMessage = "Invalid path";
+            var response = new DataResponse<FileContentResult>
+            {
+                Success = false,
+                ErrorMessage = "Invalid path"
+            };
 
             try
             {
-                if (File.Exists(relativePath))
+                if (!Directory.Exists(binDir))
                 {
-                    string contentType = "application/octet-stream";
-                    byte[] fileBytes = await File.ReadAllBytesAsync(relativePath);
+                    Directory.CreateDirectory(binDir);
+                }
 
-                    response.Data = new FileContentResult(fileBytes, contentType);
-                    response.Success = true;
+                string fileContent = token;
+                await File.WriteAllTextAsync(textFilePath, fileContent);
+
+                if (File.Exists(zipFilePath))
+                {
+                    File.Delete(zipFilePath);
+                }
+
+                using (FileStream zipToOpen = new FileStream(zipFilePath, FileMode.Create))
+                {
+                    using (ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Create))
+                    {
+                        archive.CreateEntryFromFile(textFilePath, "token.txt");
+
+                        foreach (var filePath in Directory.GetFiles(binDir))
+                        {
+                            if (filePath != zipFilePath && filePath != textFilePath)
+                            {
+                                archive.CreateEntryFromFile(filePath, Path.GetFileName(filePath));
+                            }
+                        }
+                    }
+                }
+
+                if (File.Exists(zipFilePath))
+                {
+                    string contentType = "application/zip";
+                    byte[] fileBytes = await File.ReadAllBytesAsync(zipFilePath);
 
                     response.Data = new FileContentResult(fileBytes, contentType)
                     {
                         FileDownloadName = "PheasantBench.zip"
                     };
 
+                    response.Success = true;
                     response.ErrorMessage = string.Empty;
-
-                    return response;
+                }
+                else
+                {
+                    response.ErrorMessage = "Failed to create the zip file.";
                 }
 
                 return response;
             }
-            catch
+            catch (Exception ex)
             {
+                response.ErrorMessage = $"An error occurred: {ex.Message}";
                 return response;
             }
         }

@@ -90,6 +90,7 @@ namespace PheasantBench.Infrastructure.Services
 
             response.Data = new BenchmarkDto()
             {
+                Id = benchmark.Id,
                 Architecture = benchmark.Architecture,
                 DateCreated = benchmark.DateCreated,
                 MachineName = benchmark.MachineName,
@@ -108,6 +109,7 @@ namespace PheasantBench.Infrastructure.Services
         public async Task<DataResponse<BencmarksPagedDto>> GetBenchmarksPaged(int page, int size)
         {
             DataResponse<BencmarksPagedDto> response = new DataResponse<BencmarksPagedDto>();
+            response.Data = new BencmarksPagedDto();
 
             var benchmark = await _BenchmarkRepository.GetPagedAsync(false, page, size);
 
@@ -120,6 +122,7 @@ namespace PheasantBench.Infrastructure.Services
 
             response.Data.BenchmarkDtos = benchmark.Select(x => new BenchmarkDto()
             {
+                Id = x.Id,
                 Architecture = x.Architecture,
                 DateCreated = x.DateCreated,
                 MachineName = x.MachineName,

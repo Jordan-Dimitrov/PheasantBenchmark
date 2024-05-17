@@ -2,6 +2,7 @@
 {
     public class BenchmarkDto
     {
+        public Guid Id { get; set; }
         public string ProcessorName { get; set; } = null!;
         public string Architecture { get; set; } = null!;
         public string MachineName { get; set; } = null!;

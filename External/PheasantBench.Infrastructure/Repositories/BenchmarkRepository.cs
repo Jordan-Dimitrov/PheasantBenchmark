@@ -26,21 +26,21 @@ namespace PheasantBench.Infrastructure.Repositories
 
         public async Task<IEnumerable<Benchmark>> GetAllAsync(bool trackChanges)
         {
-            var query = _Context.Benchmarks;
+            var query = _Context.Benchmarks.Include(x => x.User);
 
             return await (trackChanges ? query.ToListAsync() : query.AsNoTracking().ToListAsync());
         }
 
         public async Task<Benchmark?> GetByIdAsync(Guid id, bool trackChanges)
         {
-            var query = _Context.Benchmarks.Where(x => x.Id == id);
+            var query = _Context.Benchmarks.Include(x => x.User).Where(x => x.Id == id);
 
             return await (trackChanges ? query.FirstOrDefaultAsync() : query.AsNoTracking().FirstOrDefaultAsync());
         }
 
         public async Task<Benchmark?> GetByAsync(Expression<Func<Benchmark, bool>> condition)
         {
-            return await _Context.Benchmarks.FirstOrDefaultAsync(condition);
+            return await _Context.Benchmarks.Include(x => x.User).FirstOrDefaultAsync(condition);
         }
 
         public async Task<bool> InsertAsync(Benchmark value)
@@ -58,7 +58,8 @@ namespace PheasantBench.Infrastructure.Repositories
 
         public async Task<IEnumerable<Benchmark>> GetPagedAsync(bool trackChanges, int page, int size)
         {
-            var query = _Context.Benchmarks.Skip((page - 1) * size)
+            var query = _Context.Benchmarks.Include(x => x.User)
+                .Skip((page - 1) * size)
                 .Take(size)
                 .OrderByDescending(x => x.Score);
 

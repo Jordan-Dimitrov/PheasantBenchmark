@@ -9,7 +9,7 @@ namespace PheasantBench.App
     class CpuBenchmark
     {
         private bool _StopCheck;
-        private long _Score;
+        public long _Score;
 
         public async Task StartAsync(int numberOfCores)
         {

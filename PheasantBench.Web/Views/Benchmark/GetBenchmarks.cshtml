@@ -1,4 +1,4 @@
-﻿@model PheasantBench.Application.ViewModels.ForumThreadPagedDto
+﻿@model PheasantBench.Application.ViewModels.BencmarksPagedDto
 
 @if (!string.IsNullOrEmpty(ViewBag.Success))
 {
@@ -7,19 +7,13 @@
     </div>
 }
 
-@foreach (var item in Model.ForumThreads)
+@foreach (var item in Model.BenchmarkDtos)
 {
-    <form method="get" asp-controller="ForumMessage" asp-action="GetMessages" method="get">
-        @Html.Hidden("page", 1)
-        @Html.Hidden("threadId", item.Id)
-        <button type="submit" class="nav-link btn btn-link text-dark">@item.Name</button>
-        @Html.AntiForgeryToken()
-    </form>
-
+    <h3>@item.Architecture</h3>
     @if (User.IsInRole("Admin"))
     {
-        <form method="post" asp-controller="Thread" asp-action="Remove" method="get">
-            @Html.Hidden("threadId", item.Id)
+        <form method="post" asp-controller="Benchmark" asp-action="Remove" method="get">
+            @Html.Hidden("benchmarkId", item.Id)
             <button type="submit" class="btn btn-danger">Delete</button>
             @Html.AntiForgeryToken()
         </form>
@@ -28,10 +22,10 @@
 
 @if (ViewBag.PageNumber > 1)
 {
-    <a href="@Url.Action("GetThreads", new { page = ViewBag.PageNumber - 1 })" class="btn btn-primary">Previous</a>
+    <a href="@Url.Action("GetBenchmarks", new { page = ViewBag.PageNumber - 1 })" class="btn btn-primary">Previous</a>
 }
 
-@if (ViewBag.PageNumber < Model.TotalPages || Model.ForumThreads.Count() == 5)
+@if (ViewBag.PageNumber < Model.TotalPages || Model.BenchmarkDtos.Count() == 5)
 {
-    <a href="@Url.Action("GetThreads", new { page = ViewBag.PageNumber + 1 })" class="btn btn-primary">Next</a>
+    <a href="@Url.Action("GetBenchmarks", new { page = ViewBag.PageNumber + 1 })" class="btn btn-primary">Next</a>
 }

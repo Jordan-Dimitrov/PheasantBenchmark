@@ -19,16 +19,19 @@ namespace PheasantBench.Web.Controllers
             _FileService = fileService;
         }
 
+        [Authorize]
         [HttpGet]
         public IActionResult Download()
         {
             return View();
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> DownloadFile()
         {
-            var response = await _FileService.DownloadBenchmark();
+            var token = _TokenService.CreateToken(User.Identity.Name);
+            var response = await _FileService.DownloadBenchmark(token);
 
             if (!response.Success)
             {
@@ -37,33 +40,6 @@ namespace PheasantBench.Web.Controllers
             }
 
             return response.Data;
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> PostBenchmark(CreateBenchmarkDto benchmarkDto)
-        {
-            string? jwtToken = Request.Cookies["jwtToken"];
-
-            string username = _TokenService.GetUsername(jwtToken);
-
-            if (username is null)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
-
-            var response = await _BenchmarkService.CreateBenchmark(benchmarkDto, username);
-
-            if (!response.Success)
-            {
-                return BadRequest();
-            }
-
-            return Ok(response);
         }
 
         [HttpGet]

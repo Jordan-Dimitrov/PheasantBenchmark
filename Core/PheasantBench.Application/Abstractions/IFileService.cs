@@ -9,6 +9,6 @@ namespace PheasantBench.Application.Abstractions
         Task<DataResponse<string>> UploadAsync(IFormFile file);
         Task<Response> RemoveAsync(string filename);
         Task<DataResponse<FileContentResult>> GetAsync(string filename);
-        Task<DataResponse<FileContentResult>> DownloadBenchmark();
+        Task<DataResponse<FileContentResult>> DownloadBenchmark(string token);
     }
 }

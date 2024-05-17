@@ -1,5 +1,17 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model PheasantBench.Application.ViewModels.BenchmarkDto
+
 @{
+    ViewData["Title"] = "Delete Benchmark";
+}
+
+<h1>Delete Forum Message</h1>
+
+@if (Model is not null)
+{
+    <h3>Are you sure you want to delete @Model.MachineName?</h3>
+    <form method="post" asp-controller="Benchmark" asp-action="Delete" method="post">
+        @Html.Hidden("benchmarkId", Model.Id)
+        <button type="submit" class="btn btn-danger">Delete</button>
+        @Html.AntiForgeryToken()
+    </form>
 }

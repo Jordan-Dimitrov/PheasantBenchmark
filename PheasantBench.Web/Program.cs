@@ -22,6 +22,7 @@ namespace PheasantBench.Web
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
 
+            builder.Services.AddSwaggerGen();
             builder.Services.AddAuthentication();
             builder.Services.AddAuthorization();
 
@@ -45,6 +46,8 @@ namespace PheasantBench.Web
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
+                app.UseSwagger();
+                app.UseSwaggerUI();
                 app.UseMigrationsEndPoint();
             }
             else
