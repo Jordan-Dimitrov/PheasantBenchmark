@@ -4,7 +4,7 @@
     ViewData["Title"] = "Messages";
 }
 
-<h1>@ViewBag.Description</h1>
+<h1>@Model.Thread.Description</h1>
 
 @if (!string.IsNullOrEmpty(ViewBag.Success))
 {
@@ -25,40 +25,45 @@
 
         <div>
             <span>Upvotes: @item.UpvoteCount</span>
-            @if (User.IsInRole("Admin"))
-            {
-                <form method="post" asp-controller="ForumMessage" asp-action="Remove" method="get">
-                    @Html.Hidden("forumMessageId", item.Id)
-                    <button type="submit" class="btn btn-danger">Delete</button>
+            <div class="d-flex">
+                <form method="post" asp-controller="ForumMessage" asp-action="Upvote">
+                    @Html.Hidden("messageId", item.Id)
+                    <input type="hidden" name="score" value="1" />
+                    <button type="submit" class="btn btn-primary">↑</button>
                     @Html.AntiForgeryToken()
                 </form>
-            }
-            <form method="post" asp-controller="ForumMessage" asp-action="Upvote">
-                @Html.Hidden("messageId", item.Id)
-                <input type="hidden" name="score" value="1" />
-                <button type="submit" class="btn btn-primary">Upvote</button>
-                @Html.AntiForgeryToken()
-            </form>
-            <form method="post" asp-controller="ForumMessage" asp-action="Upvote">
-                @Html.Hidden("messageId", item.Id)
-                <input type="hidden" name="score" value="0" />
-                <button type="submit" class="btn btn-primary">Downvote</button>
-                @Html.AntiForgeryToken()
-            </form>
+                <form method="post" asp-controller="ForumMessage" asp-action="Upvote" class="me-2">
+                    @Html.Hidden("messageId", item.Id)
+                    <input type="hidden" name="score" value="0" />
+                    <button type="submit" class="btn btn btn-danger">↓</button>
+                    @Html.AntiForgeryToken()
+                </form>
+                @if (User.IsInRole("Admin"))
+                {
+                    <form method="post" asp-controller="ForumMessage" asp-action="Remove" method="get">
+                        @Html.Hidden("forumMessageId", item.Id)
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                        @Html.AntiForgeryToken()
+                    </form>
+                }
+            </div>
+
         </div>
     </div>
     <br />
 }
 
-@if (ViewBag.PageNumber > 1)
+@if (Model.PageNumber > 1)
 {
-    <a href="@Url.Action("GetMessages", new { page = ViewBag.PageNumber - 1, threadId = Model.ForumMessages.First().ForumThreadId})" class="btn btn-primary">Previous</a>
+    <a href="@Url.Action("GetMessages", new { page = ViewBag.PageNumber - 1, threadId = Model.Thread.Id})" class="btn btn-primary">Previous</a>
 }
 
-@if (ViewBag.PageNumber < Model.TotalPages || Model.ForumMessages.Count() == 5)
+@if (Model.PageNumber < Model.TotalPages || Model.ForumMessages.Count() == 5)
 {
-    <a href="@Url.Action("GetMessages", new { page = ViewBag.PageNumber + 1, threadId = Model.ForumMessages.First().ForumThreadId })" class="btn btn-primary">Next</a>
+    <a href="@Url.Action("GetMessages", new { page = ViewBag.PageNumber + 1, threadId = Model.Thread.Id })" class="btn btn-primary">Next</a>
 }
+
+<br />
 
 <div class="container">
     <h4>Create Forum Message</h4>
@@ -76,7 +81,7 @@
 
         @if (ViewBag.ThreadId is not null)
         {
-            @Html.Hidden("ForumThreadId", (Guid)ViewBag.ThreadId)
+            @Html.Hidden("ForumThreadId", Model.Thread.Id)
         }
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>

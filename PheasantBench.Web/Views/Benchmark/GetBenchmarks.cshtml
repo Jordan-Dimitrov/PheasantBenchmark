@@ -7,18 +7,46 @@
     </div>
 }
 
-@foreach (var item in Model.BenchmarkDtos)
-{
-    <h3>@item.Architecture</h3>
-    @if (User.IsInRole("Admin"))
-    {
-        <form method="post" asp-controller="Benchmark" asp-action="Remove" method="get">
-            @Html.Hidden("benchmarkId", item.Id)
-            <button type="submit" class="btn btn-danger">Delete</button>
-            @Html.AntiForgeryToken()
-        </form>
-    }
-}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Processor</th>
+            <th>Architecture</th>
+            <th>Machine</th>
+            <th>OS</th>
+            <th>Date</th>
+            <th>User</th>
+            @if (User.IsInRole("Admin"))
+            {
+                <th>Actions</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.BenchmarkDtos)
+        {
+            <tr>
+                <td>@item.ProcessorName</td>
+                <td>@item.Architecture</td>
+                <td>@item.MachineName</td>
+                <td>@item.OsVersion</td>
+                <td>@item.DateCreated</td>
+                <td>@item.User.Name</td>
+                @if (User.IsInRole("Admin"))
+                {
+                    <td>
+                        <form method="get" asp-controller="Benchmark" asp-action="Remove">
+                            @Html.Hidden("benchmarkId", item.Id)
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                            @Html.AntiForgeryToken()
+                        </form>
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+
 
 @if (ViewBag.PageNumber > 1)
 {

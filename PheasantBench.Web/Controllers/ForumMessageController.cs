@@ -1,11 +1,8 @@
-﻿using Humanizer;
-using Microsoft.AspNet.Identity;
+﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PheasantBench.Application.Abstractions;
 using PheasantBench.Application.Dtos;
-using PheasantBench.Domain.Models;
-using PheasantBench.Infrastructure.Services;
 
 namespace PheasantBench.Web.Controllers
 {
@@ -98,12 +95,12 @@ namespace PheasantBench.Web.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> GetMessages([FromQuery] int page, [FromQuery] Guid threadId)
+        public async Task<IActionResult> GetMessages([FromQuery] Guid threadId, [FromQuery] int page = 1)
         {
             var response = await _ForumMessageService.GetForumMessagesPagedByThread(page, _Size, threadId);
             var thread = await _ForumThreadService.GetForumThread(threadId);
 
-            if(!thread.Success)
+            if (!thread.Success)
             {
                 TempData["ErrorMessage"] = thread.ErrorMessage;
                 return RedirectToAction("Error");
@@ -115,9 +112,8 @@ namespace PheasantBench.Web.Controllers
                 return RedirectToAction("Error");
             }
 
-            ViewBag.PageNumber = page;
-            ViewBag.Description = thread.Data.Description;
-            ViewBag.ThreadId = threadId;
+            response.Data.PageNumber = page;
+            response.Data.Thread = thread.Data;
 
             return View(response.Data);
         }

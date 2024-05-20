@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PheasantBench.Application.Abstractions;
-using PheasantBench.Application.Dtos;
 
 namespace PheasantBench.Web.Controllers
 {
@@ -36,7 +35,7 @@ namespace PheasantBench.Web.Controllers
             if (!response.Success)
             {
                 TempData["ErrorMessage"] = response.ErrorMessage;
-                return RedirectToAction("Error");
+                return RedirectToAction("Error", "ForumMessage");
             }
 
             return response.Data;
@@ -51,7 +50,7 @@ namespace PheasantBench.Web.Controllers
             if (!response.Success)
             {
                 TempData["ErrorMessage"] = response.ErrorMessage;
-                return RedirectToAction("Error");
+                return RedirectToAction("Error", "ForumMessage");
             }
 
             ViewBag.PageNumber = page;

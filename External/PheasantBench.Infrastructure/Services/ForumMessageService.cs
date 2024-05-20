@@ -53,7 +53,7 @@ namespace PheasantBench.Infrastructure.Services
                 User = user
             };
 
-            if(benchmark.File is not null)
+            if (benchmark.File is not null)
             {
                 var fileResponse = await _FileService.UploadAsync(benchmark.File);
 
@@ -187,7 +187,8 @@ namespace PheasantBench.Infrastructure.Services
                 UpvoteCount = x.UpvoteCount
             });
 
-            response.Data.TotalPages = await _ForumMessageRepository.GetPageCount(size);
+            response.Data.TotalPages = await _ForumMessageRepository
+                .GetMessageCountByThread(threadId, size);
 
             return response;
         }
