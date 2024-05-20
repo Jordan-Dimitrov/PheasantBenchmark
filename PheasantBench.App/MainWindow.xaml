@@ -5,17 +5,64 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PheasantBench.App"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <StackPanel>
-        <Label x:Name="ProcessorName" Margin="0,0,0,10">Processor Name:</Label>
-        <Label x:Name="CPUCores" Margin="0,0,0,10">CPU cores:</Label>
-        <Label x:Name="Architecture" Margin="0,0,0,10">Architecture:</Label>
-        <Label x:Name="MachineName" Margin="0,0,0,10">Machine Name:</Label>
-        <Label x:Name="OSVersion" Margin="0,0,0,10">OS Version:</Label>
-        <Button x:Name="StartBenchmarkButton" Click="StartBenchmarkButton_Click">Start Benchmark</Button>
-        <StackPanel>
-            <Label Margin="0,0,0,0">Score:</Label>
-            <Label x:Name="BenchmarkScore" Margin="0,0,0,0"/>
+        Title="PheasantBench" Height="450" Width="800">
+    <Window.Resources>
+        <Style TargetType="Label">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Foreground" Value="Black"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Background" Value="#007ACC"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#007ACC"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style TargetType="StackPanel">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Label Content="Processor Name:" Grid.Row="0" Grid.Column="0"/>
+        <Label x:Name="ProcessorName" Grid.Row="0" Grid.Column="1"/>
+
+        <Label Content="CPU Cores:" Grid.Row="1" Grid.Column="0"/>
+        <Label x:Name="CPUCores" Grid.Row="1" Grid.Column="1"/>
+
+        <Label Content="Architecture:" Grid.Row="2" Grid.Column="0"/>
+        <Label x:Name="Architecture" Grid.Row="2" Grid.Column="1"/>
+
+        <Label Content="Machine Name:" Grid.Row="3" Grid.Column="0"/>
+        <Label x:Name="MachineName" Grid.Row="3" Grid.Column="1"/>
+
+        <Label Content="OS Version:" Grid.Row="4" Grid.Column="0"/>
+        <Label x:Name="OSVersion" Grid.Row="4" Grid.Column="1"/>
+
+        <Button x:Name="StartBenchmarkButton" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Click="StartBenchmarkButton_Click">Start Benchmark</Button>
+
+        <StackPanel Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2">
+            <Label Content="Score:"/>
+            <Label x:Name="BenchmarkScore"/>
         </StackPanel>
-    </StackPanel>
+    </Grid>
 </Window>

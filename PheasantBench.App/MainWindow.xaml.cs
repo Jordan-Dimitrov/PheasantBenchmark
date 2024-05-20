@@ -58,7 +58,18 @@ namespace PheasantBench.App
             StartBenchmarkButton.IsEnabled = true;
 
             string tokenFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "token.txt");
-            string jwtToken = await File.ReadAllTextAsync(tokenFilePath);
+
+            string jwt = "";
+
+            try
+            {
+                jwt = await File.ReadAllTextAsync(tokenFilePath);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("No token provided");
+                return;
+            }
 
             var dto = new CreateBenchmarkDto()
             {
@@ -69,17 +80,35 @@ namespace PheasantBench.App
                 Score = benchmark.Score
             };
 
-            await PostBenchmarkAsync(dto, jwtToken);
+            try
+            {
+                var response = await PostBenchmarkAsync(dto, jwt);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("Benchmark data submitted successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else
+                {
+                    MessageBox.Show($"Failed to submit benchmark data. Status code: {response.StatusCode}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+
+            }
+            catch (Exception)
+            {
+                MessageBox.Show($"Failed to submit benchmark data.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
         }
 
-        public async Task PostBenchmarkAsync(CreateBenchmarkDto benchmarkDto, string jwtToken)
+        public async Task<HttpResponseMessage> PostBenchmarkAsync(CreateBenchmarkDto benchmarkDto, string jwtToken)
         {
             var requestUri = "https://localhost:7203/api/BenchmarkApi";
             var jsonContent = JsonConvert.SerializeObject(benchmarkDto);
             var content = new StringContent(jsonContent, System.Text.Encoding.UTF8, "application/json");
 
             _HttpClient.DefaultRequestHeaders.Add("Cookie", $"jwtToken={jwtToken}");
-            await _HttpClient.PostAsync(requestUri, content);
+            return await _HttpClient.PostAsync(requestUri, content);
         }
     }
 }
