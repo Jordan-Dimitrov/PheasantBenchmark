@@ -55,12 +55,12 @@
 
 @if (Model.PageNumber > 1)
 {
-    <a href="@Url.Action("GetMessages", new { page = ViewBag.PageNumber - 1, threadId = Model.Thread.Id})" class="btn btn-primary">Previous</a>
+    <a href="@Url.Action("GetMessages", new { page = Model.PageNumber - 1, threadId = Model.Thread.Id})" class="btn btn-primary">Previous</a>
 }
 
 @if (Model.PageNumber < Model.TotalPages || Model.ForumMessages.Count() == 5)
 {
-    <a href="@Url.Action("GetMessages", new { page = ViewBag.PageNumber + 1, threadId = Model.Thread.Id })" class="btn btn-primary">Next</a>
+    <a href="@Url.Action("GetMessages", new { page = Model.PageNumber + 1, threadId = Model.Thread.Id })" class="btn btn-primary">Next</a>
 }
 
 <br />
@@ -79,10 +79,7 @@
         </div>
         @Html.AntiForgeryToken()
 
-        @if (ViewBag.ThreadId is not null)
-        {
-            @Html.Hidden("ForumThreadId", Model.Thread.Id)
-        }
+        @Html.Hidden("ForumThreadId", Model.Thread.Id)
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 </div>

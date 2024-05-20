@@ -95,7 +95,7 @@ namespace PheasantBench.Web.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> GetMessages([FromQuery] Guid threadId, [FromQuery] int page = 1)
+        public async Task<IActionResult> GetMessages([FromQuery] int page, [FromQuery] Guid threadId)
         {
             var response = await _ForumMessageService.GetForumMessagesPagedByThread(page, _Size, threadId);
             var thread = await _ForumThreadService.GetForumThread(threadId);
