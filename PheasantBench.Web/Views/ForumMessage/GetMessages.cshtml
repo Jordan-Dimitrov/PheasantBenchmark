@@ -4,7 +4,8 @@
     ViewData["Title"] = "Messages";
 }
 
-<h1>@Model.Thread.Description</h1>
+<h1>@Model.Thread.Name</h1>
+<h2>@Model.Thread.Description</h2>
 
 @if (!string.IsNullOrEmpty(ViewBag.Success))
 {
@@ -58,13 +59,12 @@
     <a href="@Url.Action("GetMessages", new { page = Model.PageNumber - 1, threadId = Model.Thread.Id})" class="btn btn-primary">Previous</a>
 }
 
-@if (Model.PageNumber < Model.TotalPages || Model.ForumMessages.Count() == 5)
+@if (Model.PageNumber < Model.TotalPages)
 {
     <a href="@Url.Action("GetMessages", new { page = Model.PageNumber + 1, threadId = Model.Thread.Id })" class="btn btn-primary">Next</a>
 }
 
 <br />
-
 <div class="container">
     <h4>Create Forum Message</h4>
     <form asp-controller="ForumMessage" asp-action="Create" method="post" enctype="multipart/form-data">

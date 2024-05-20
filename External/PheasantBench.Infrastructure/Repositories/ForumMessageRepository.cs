@@ -82,9 +82,11 @@ namespace PheasantBench.Infrastructure.Repositories
 
         public async Task<int> GetMessageCountByThread(Guid threadId, int size)
         {
-            return Math.Max(await _Context.ForumMessages
+            var count = (double)await _Context.ForumMessages
                 .Where(x => x.ForumThreadId == threadId)
-                .CountAsync() / size, 1);
+                .CountAsync() / size;
+
+            return (int)Math.Ceiling(count);
         }
     }
 }
