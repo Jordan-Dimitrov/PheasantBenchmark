@@ -6,7 +6,7 @@ namespace PheasantBench.Web.Controllers
 {
     public class BenchmarkController : Controller
     {
-        private const int _Size = 5;
+        private const int _Size = 20;
         private readonly IBenchmarkService _BenchmarkService;
         private readonly ITokenService _TokenService;
         private readonly IFileService _FileService;

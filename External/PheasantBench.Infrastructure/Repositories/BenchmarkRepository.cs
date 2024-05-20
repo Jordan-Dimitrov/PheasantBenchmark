@@ -70,5 +70,10 @@ namespace PheasantBench.Infrastructure.Repositories
         {
             return Math.Max(await _Context.Benchmarks.CountAsync() / size, 1);
         }
+
+        public async Task<int> GetCount()
+        {
+            return await _Context.Benchmarks.CountAsync();
+        }
     }
 }

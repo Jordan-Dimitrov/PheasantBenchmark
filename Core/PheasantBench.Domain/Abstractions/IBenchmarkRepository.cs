@@ -4,5 +4,6 @@ namespace PheasantBench.Domain.Abstractions
 {
     public interface IBenchmarkRepository : IRepository<Benchmark>
     {
+        Task<int> GetCount();
     }
 }

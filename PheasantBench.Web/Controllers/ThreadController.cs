@@ -10,7 +10,7 @@ namespace PheasantBench.Web.Controllers
         private readonly IForumThreadService _ForumThreadService;
         private readonly IForumMessageService _ForumMessageService;
         private readonly IUserService _UserService;
-        private const int _Size = 5;
+        private const int _Size = 10;
         public ThreadController(IForumThreadService forumThreadService,
             IForumMessageService forumMessageService,
             IUserService userService)

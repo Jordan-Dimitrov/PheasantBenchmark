@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PheasantBench.App
+﻿namespace PheasantBench.App
 {
     class CpuBenchmark
     {
         private bool _StopCheck;
-        public long _Score;
+        private long _Score;
+
+        public long Score => _Score;
 
         public async Task StartAsync(int numberOfCores)
         {
@@ -25,6 +21,11 @@ namespace PheasantBench.App
             await Task.WhenAll(tasks);
         }
 
+        public void Stop()
+        {
+            _StopCheck = true;
+        }
+
         private void StressCoreAsync()
         {
             while (!_StopCheck)
@@ -36,7 +37,5 @@ namespace PheasantBench.App
                 _Score++;
             }
         }
-
-        public long Score => _Score;
     }
 }

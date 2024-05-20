@@ -1,13 +1,10 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using PheasantBench.Application.Abstractions;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+﻿using PheasantBench.Application.Abstractions;
 
 namespace PheasantBench.Infrastructure.Services
 {
     public class TokenService : ITokenService
     {
+        //TODO: add some form of tokens in the future
         public string CreateToken(string username)
         {
             return username;

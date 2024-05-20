@@ -1,9 +1,10 @@
-﻿@{
+﻿@model PheasantBench.Application.ViewModels.StatsDto
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    <p>mnogodobur benchmark</p>
+    <h1>Welcome to PheasantBench!</h1>
+    <h2>Here, you can benchmark your CPU, discuss results, and view benchmark results.</h2>
+    <h2>So far @Model.BenchmarkCount have been made</h2>
 </div>

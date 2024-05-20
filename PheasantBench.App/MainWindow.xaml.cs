@@ -1,23 +1,11 @@
 ﻿using Newtonsoft.Json;
 using System.Diagnostics;
-using System.Net.Http;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using static System.Formats.Asn1.AsnWriter;
 using System.IO;
+using System.Net.Http;
+using System.Windows;
+
 namespace PheasantBench.App
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         private const string _ProcessorIdentifier = "PROCESSOR_IDENTIFIER";
@@ -28,6 +16,7 @@ namespace PheasantBench.App
         private string _MachineName;
         private string _OsVersion;
         private readonly HttpClient _HttpClient;
+
         public MainWindow()
         {
             _ProcessorName = Environment.GetEnvironmentVariable(_ProcessorIdentifier);
@@ -53,25 +42,23 @@ namespace PheasantBench.App
             CpuBenchmark benchmark = new CpuBenchmark();
 
             Stopwatch stopwatch = new Stopwatch();
-
             stopwatch.Start();
 
             Task benchmarkTask = benchmark.StartAsync(_NumCores);
 
-            while (!benchmarkTask.IsCompleted && stopwatch.Elapsed < TimeSpan.FromSeconds(10))
+            while (!benchmarkTask.IsCompleted && stopwatch.Elapsed < TimeSpan.FromSeconds(30))
             {
                 BenchmarkScore.Content = benchmark.Score;
                 await Task.Delay(1000);
             }
 
+            benchmark.Stop();
+            await benchmarkTask;
+
             StartBenchmarkButton.IsEnabled = true;
 
-            string tokenFilePath = System.IO.Path
-                .Combine(AppDomain.CurrentDomain.BaseDirectory, "token.txt");
-
-            string jwtToken = "";
-
-            jwtToken = await File.ReadAllTextAsync(tokenFilePath);
+            string tokenFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "token.txt");
+            string jwtToken = await File.ReadAllTextAsync(tokenFilePath);
 
             var dto = new CreateBenchmarkDto()
             {
@@ -82,19 +69,17 @@ namespace PheasantBench.App
                 Score = benchmark.Score
             };
 
-            PostBenchmarkAsync(dto, jwtToken);
+            await PostBenchmarkAsync(dto, jwtToken);
         }
 
         public async Task PostBenchmarkAsync(CreateBenchmarkDto benchmarkDto, string jwtToken)
         {
             var requestUri = "https://localhost:7203/api/BenchmarkApi";
-
             var jsonContent = JsonConvert.SerializeObject(benchmarkDto);
             var content = new StringContent(jsonContent, System.Text.Encoding.UTF8, "application/json");
 
             _HttpClient.DefaultRequestHeaders.Add("Cookie", $"jwtToken={jwtToken}");
-
-           await _HttpClient.PostAsync(requestUri, content);
+            await _HttpClient.PostAsync(requestUri, content);
         }
     }
 }
