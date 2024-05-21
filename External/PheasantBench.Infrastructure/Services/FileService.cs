@@ -36,6 +36,10 @@ namespace PheasantBench.Infrastructure.Services
             {
                 return "image/jpg";
             }
+            else if (fileName.EndsWith(".gif", StringComparison.OrdinalIgnoreCase))
+            {
+                return "image/gif";
+            }
             else
             {
                 return "unsupported";
@@ -100,6 +104,11 @@ namespace PheasantBench.Infrastructure.Services
 
             string fileName = Path.GetFileName(file.FileName);
             string fileExtension = Path.GetExtension(fileName).ToLowerInvariant();
+
+            if (GetContentType(fileName) == "unsupported")
+            {
+                response.ErrorMessage = "Invalid file";
+            }
 
             string filePath = $"{_UploadsDirectory}/{fileName}";
 

@@ -35,6 +35,7 @@ namespace PheasantBench.Web.Controllers
             return View();
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Upvote(Guid messageId, byte score)
         {

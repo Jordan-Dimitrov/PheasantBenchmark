@@ -83,6 +83,7 @@ namespace PheasantBench.Web.Controllers
             return RedirectToAction("GetThreads");
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetThreads([FromQuery] int page = 1)
         {
