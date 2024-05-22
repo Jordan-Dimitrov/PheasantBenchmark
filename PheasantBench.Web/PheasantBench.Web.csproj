@@ -29,8 +29,4 @@
     <ProjectReference Include="..\External\PheasantBench.Infrastructure\PheasantBench.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="wwwroot\uploads\" />
-  </ItemGroup>
-
 </Project>

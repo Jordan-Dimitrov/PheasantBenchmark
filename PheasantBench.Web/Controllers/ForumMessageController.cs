@@ -45,10 +45,12 @@ namespace PheasantBench.Web.Controllers
             if (!response.Success)
             {
                 TempData["ErrorMessage"] = response.ErrorMessage;
-                return RedirectToAction("Error");
+            }
+            else
+            {
+                TempData["Success"] = "Upvoted message successfully";
             }
 
-            ViewBag.Success = "Addedd successfully";
             return RedirectToAction("GetMessages", new { page = 1, threadId = response.Data });
         }
 
@@ -60,8 +62,8 @@ namespace PheasantBench.Web.Controllers
 
             if (!response.Success)
             {
-                TempData["ErrorMessage"] = response.ErrorMessage;
-                return RedirectToAction("Error");
+                ViewBag.ErrorMessage = response.ErrorMessage;
+                return View();
             }
 
             return View(response.Data);
@@ -77,10 +79,11 @@ namespace PheasantBench.Web.Controllers
             if (!response.Success)
             {
                 TempData["ErrorMessage"] = response.ErrorMessage;
-                return RedirectToAction("Error");
             }
-
-            ViewBag.Success = "Removed successfully";
+            else
+            {
+                TempData["Success"] = "Successfuly deleted";
+            }
 
             return RedirectToAction("GetMessages", new { page = 1, threadId = response.Data });
         }
@@ -113,6 +116,14 @@ namespace PheasantBench.Web.Controllers
                 return RedirectToAction("Error");
             }
 
+            string success = (string)TempData["Success"];
+
+            ViewBag.Success = success;
+
+            string error = (string)TempData["ErrorMessage"];
+
+            ViewBag.ErrorMessage = error;
+
             response.Data.PageNumber = page;
             response.Data.Thread = thread.Data;
 
@@ -125,8 +136,8 @@ namespace PheasantBench.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                TempData["ErrorMessage"] = "Invalid data!";
-                return View("Error");
+                TempData["ErrorMessage"] = "Invalid data";
+                return RedirectToAction("GetMessages", new { page = 1, threadId = dto.ForumThreadId });
             }
 
             var response = await _ForumMessageService.CreateForumMessage(dto, User.Identity.GetUserId());
@@ -134,10 +145,11 @@ namespace PheasantBench.Web.Controllers
             if (!response.Success)
             {
                 TempData["ErrorMessage"] = response.ErrorMessage;
-                return View("Error");
             }
-
-            ViewBag.Success = "Successfuly created";
+            else
+            {
+                TempData["Success"] = "Successfuly created";
+            }
 
             return RedirectToAction("GetMessages", new { page = 1, threadId = dto.ForumThreadId });
         }

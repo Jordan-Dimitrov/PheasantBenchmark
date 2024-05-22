@@ -33,14 +33,18 @@ namespace PheasantBench.Infrastructure.Repositories
 
         public async Task<ForumThread?> GetByIdAsync(Guid id, bool trackChanges)
         {
-            var query = _Context.ForumThreads.Where(x => x.Id == id);
+            var query = _Context.ForumThreads
+                .Include(x => x.ForumMessages)
+                .Where(x => x.Id == id);
 
             return await (trackChanges ? query.FirstOrDefaultAsync() : query.AsNoTracking().FirstOrDefaultAsync());
         }
 
         public async Task<ForumThread?> GetByAsync(Expression<Func<ForumThread, bool>> condition)
         {
-            return await _Context.ForumThreads.FirstOrDefaultAsync(condition);
+            return await _Context.ForumThreads
+                .Include(x => x.ForumMessages)
+                .FirstOrDefaultAsync(condition);
         }
 
         public async Task<bool> InsertAsync(ForumThread value)
@@ -58,7 +62,9 @@ namespace PheasantBench.Infrastructure.Repositories
 
         public async Task<IEnumerable<ForumThread>> GetPagedAsync(bool trackChanges, int page, int size)
         {
-            var query = _Context.ForumThreads.Skip((page - 1) * size)
+            var query = _Context.ForumThreads
+                .Include(x => x.ForumMessages)
+                .Skip((page - 1) * size)
                 .Take(size);
 
             return await (trackChanges ? query.ToListAsync() : query.AsNoTracking().ToListAsync());

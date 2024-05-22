@@ -4,8 +4,15 @@
 
 @if (!string.IsNullOrEmpty(ViewBag.Success))
 {
-    <div class="alert alert-danger" role="alert">
-        @ViewBag.Success
+    <div class="alert alert-success text-center" role="alert">
+        <h5>@ViewBag.Success</h5>
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+{
+    <div class="alert alert-danger text-center" role="alert">
+        <h5>@ViewBag.ErrorMessage</h5>
     </div>
 }
 

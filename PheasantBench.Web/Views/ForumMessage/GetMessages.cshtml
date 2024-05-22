@@ -4,82 +4,112 @@
     ViewData["Title"] = "Messages";
 }
 
-<h1>@Model.Thread.Name</h1>
-<h2>@Model.Thread.Description</h2>
+<h1 class="text-center">@Model.Thread.Name</h1>
+<h2 class="text-center">@Model.Thread.Description</h2>
 
 @if (!string.IsNullOrEmpty(ViewBag.Success))
 {
-    <div class="alert alert-success" role="alert">
-        @ViewBag.Success
+    <div class="alert alert-success text-center" role="alert">
+        <h5>@ViewBag.Success</h5>
     </div>
 }
-<br />
 
-@foreach (var item in Model.ForumMessages)
+@if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
 {
-    <div>
-        <h4>@item.MessageContent</h4>
-        @if (item.FileName is not null && item.FileName != "")
-        {
-            <img src="@Url.Content($"~/uploads/{item.FileName}")" alt="@Url.Content($"~/uploads/{item.FileName}")" class="capped-image" />
-        }
-
-        <div>
-            <span>Upvotes: @item.UpvoteCount</span>
-            <div class="d-flex">
-                <form method="post" asp-controller="ForumMessage" asp-action="Upvote">
-                    @Html.Hidden("messageId", item.Id)
-                    <input type="hidden" name="score" value="1" />
-                    <button type="submit" class="btn btn-primary">↑</button>
-                    @Html.AntiForgeryToken()
-                </form>
-                <form method="post" asp-controller="ForumMessage" asp-action="Upvote" class="me-2">
-                    @Html.Hidden("messageId", item.Id)
-                    <input type="hidden" name="score" value="0" />
-                    <button type="submit" class="btn btn btn-danger">↓</button>
-                    @Html.AntiForgeryToken()
-                </form>
-                @if (User.IsInRole("Admin"))
-                {
-                    <form method="post" asp-controller="ForumMessage" asp-action="Remove" method="get">
-                        @Html.Hidden("forumMessageId", item.Id)
-                        <button type="submit" class="btn btn-danger">Delete</button>
-                        @Html.AntiForgeryToken()
-                    </form>
-                }
-            </div>
-
-        </div>
+    <div class="alert alert-danger text-center" role="alert">
+        <h5>@ViewBag.ErrorMessage</h5>
     </div>
-    <br />
-}
-
-@if (Model.PageNumber > 1)
-{
-    <a href="@Url.Action("GetMessages", new { page = Model.PageNumber - 1, threadId = Model.Thread.Id})" class="btn btn-primary">Previous</a>
-}
-
-@if (Model.PageNumber < Model.TotalPages)
-{
-    <a href="@Url.Action("GetMessages", new { page = Model.PageNumber + 1, threadId = Model.Thread.Id })" class="btn btn-primary">Next</a>
 }
 
 <br />
+
 <div class="container">
-    <h4>Create Forum Message</h4>
-    <form asp-controller="ForumMessage" asp-action="Create" method="post" enctype="multipart/form-data">
-        <div class="form-group">
-            <label for="MessageContent">Message Content:</label>
-            <input type="text" class="form-control" id="MessageContent" name="MessageContent" />
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            @foreach (var item in Model.ForumMessages)
+            {
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h6>@item.User.Name</h6>
+                        <h4 class="card-title">@item.MessageContent</h4>
+                        @if (!string.IsNullOrEmpty(item.FileName))
+                        {
+                            <img src="@Url.Content($"~/uploads/{item.FileName}")" alt="Image" class="img-fluid capped-image" />
+                        }
+                        <div>
+                            <span>Upvotes: @item.UpvoteCount</span>
+                            <div class="d-flex mt-2">
+                                <form method="post" asp-controller="ForumMessage" asp-action="Upvote" class="me-2">
+                                    @Html.Hidden("messageId", item.Id)
+                                    <input type="hidden" name="score" value="1" />
+                                    <button type="submit" class="btn btn-primary">😊</button>
+                                    @Html.AntiForgeryToken()
+                                </form>
+                                <form method="post" asp-controller="ForumMessage" asp-action="Upvote" class="me-2">
+                                    @Html.Hidden("messageId", item.Id)
+                                    <input type="hidden" name="score" value="0" />
+                                    <button type="submit" class="btn btn-danger">😠</button>
+                                    @Html.AntiForgeryToken()
+                                </form>
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <form method="get" asp-controller="ForumMessage" asp-action="Remove">
+                                        @Html.Hidden("forumMessageId", item.Id)
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                        @Html.AntiForgeryToken()
+                                    </form>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
         </div>
+    </div>
 
-        <div class="form-group">
-            <label for="FileUpload">Upload File:</label>
-            <input type="file" class="form-control-file" id="File" name="File" />
+    <div class="row justify-content-center">
+        <div class="col-md-6 d-flex justify-content-between">
+            @if (Model.PageNumber > 1)
+            {
+                <a href="@Url.Action("GetMessages", new { page = Model.PageNumber - 1, threadId = Model.Thread.Id})" class="btn btn-primary">Previous</a>
+            }else
+            {
+                <a></a>
+            }
+
+            @if (Model.PageNumber < Model.TotalPages)
+            {
+                <a href="@Url.Action("GetMessages", new { page = Model.PageNumber + 1, threadId = Model.Thread.Id })" class="btn btn-primary">Next</a>
+            }
         </div>
-        @Html.AntiForgeryToken()
+    </div>
 
-        @Html.Hidden("ForumThreadId", Model.Thread.Id)
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
+    <br />
+
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">Create Forum Message</h4>
+                </div>
+                <div class="card-body">
+                    <form asp-controller="ForumMessage" asp-action="Create" method="post" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="MessageContent">Message Content:</label>
+                            <textarea class="form-control" id="MessageContent" name="MessageContent" rows="5"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="FileUpload">Upload File:</label>
+                            <input type="file" class="form-control-file" id="File" name="File" />
+                        </div>
+                        @Html.AntiForgeryToken()
+                        @Html.Hidden("ForumThreadId", Model.Thread.Id)
+                        <button type="submit" class="btn btn-primary btn-block">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </div>
 </div>

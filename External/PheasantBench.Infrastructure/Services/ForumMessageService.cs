@@ -111,6 +111,7 @@ namespace PheasantBench.Infrastructure.Services
         public async Task<DataResponse<ForumMessageDto>> GetBForumMessage(Guid id)
         {
             DataResponse<ForumMessageDto> response = new DataResponse<ForumMessageDto>();
+            response.Data = new ForumMessageDto();
 
             ForumMessage? benchmark = await _ForumMessageRepository.GetByIdAsync(id, false);
 
@@ -128,7 +129,8 @@ namespace PheasantBench.Infrastructure.Services
                 DateCreated = DateTime.UtcNow,
                 FileName = benchmark.FileName,
                 ForumThreadId = benchmark.ForumThreadId,
-                UpvoteCount = benchmark.UpvoteCount
+                UpvoteCount = benchmark.UpvoteCount,
+                User = new UserDto { Name = benchmark.User.UserName }
             };
 
             return response;
@@ -155,7 +157,9 @@ namespace PheasantBench.Infrastructure.Services
                 DateCreated = x.DateCreated,
                 FileName = x.FileName,
                 ForumThreadId = x.ForumThreadId,
-                UpvoteCount = x.UpvoteCount
+                UpvoteCount = x.UpvoteCount,
+                User = new UserDto { Name = x.User.UserName }
+
             });
 
             response.Data.TotalPages = await _ForumMessageRepository.GetPageCount(size);
@@ -184,7 +188,8 @@ namespace PheasantBench.Infrastructure.Services
                 DateCreated = x.DateCreated,
                 FileName = x.FileName,
                 ForumThreadId = x.ForumThreadId,
-                UpvoteCount = x.UpvoteCount
+                UpvoteCount = x.UpvoteCount,
+                User = new UserDto { Name = x.User.UserName }
             });
 
             response.Data.TotalPages = await _ForumMessageRepository

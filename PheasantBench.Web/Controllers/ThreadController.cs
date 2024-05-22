@@ -46,8 +46,8 @@ namespace PheasantBench.Web.Controllers
                 return View();
             }
 
-            ViewBag.Success = "Added successfully";
-            return View();
+            TempData["Success"] = $"Successfuly created {forumThread.Name}";
+            return RedirectToAction("GetThreads");
         }
 
         [HttpGet]
@@ -74,11 +74,12 @@ namespace PheasantBench.Web.Controllers
 
             if (!response.Success)
             {
-                ViewBag.ErrorMessage = response.ErrorMessage;
-                return RedirectToAction("Remove");
+                TempData["ErrorMessage"] = response.ErrorMessage;
             }
-
-            ViewBag.Success = "Removed successfully";
+            else
+            {
+                TempData["Success"] = "Successfuly deleted";
+            }
 
             return RedirectToAction("GetThreads");
         }
@@ -88,6 +89,14 @@ namespace PheasantBench.Web.Controllers
         public async Task<IActionResult> GetThreads([FromQuery] int page = 1)
         {
             var response = await _ForumThreadService.GetForumThreadsPaged(page, _Size);
+
+            string success = (string)TempData["Success"];
+
+            ViewBag.Success = success;
+
+            string error = (string)TempData["ErrorMessage"];
+
+            ViewBag.ErrorMessage = error;
 
             if (!response.Success)
             {

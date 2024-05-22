@@ -10,9 +10,12 @@ namespace PheasantBench.Infrastructure.Services
     public class ForumThreadService : IForumThreadService
     {
         private readonly IForumThreadRepository _ForumThreadRepository;
-        public ForumThreadService(IForumThreadRepository forumThreadRepository)
+        private readonly IFileService _FileService;
+        public ForumThreadService(IForumThreadRepository forumThreadRepository,
+            IFileService fileService)
         {
             _ForumThreadRepository = forumThreadRepository;
+            _FileService = fileService;
         }
 
         public async Task<Response> CreateForumThread(CreateForumThreadDto benchmark)
@@ -54,10 +57,17 @@ namespace PheasantBench.Infrastructure.Services
                 return response;
             }
 
+            var paths = benchmark.ForumMessages.Select(x => x.FileName).ToArray();
+
             if (!await _ForumThreadRepository.DeleteAsync(benchmark))
             {
                 response.Success = false;
                 response.ErrorMessage = "Unexpected error";
+            }
+
+            foreach (var item in paths)
+            {
+                await _FileService.RemoveAsync(item);
             }
 
             return response;

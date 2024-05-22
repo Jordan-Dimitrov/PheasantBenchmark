@@ -1,4 +1,5 @@
 ﻿using FakeItEasy;
+using PheasantBench.Application.Abstractions;
 using PheasantBench.Application.Dtos;
 using PheasantBench.Domain.Abstractions;
 using PheasantBench.Domain.Models;
@@ -9,9 +10,11 @@ namespace PheasantBench.Tests.Services
     public class ForumThreadServiceTests
     {
         private readonly IForumThreadRepository _ForumThreadRepository;
+        private readonly IFileService _FileService;
         public ForumThreadServiceTests()
         {
             _ForumThreadRepository = A.Fake<IForumThreadRepository>();
+            _FileService = A.Fake<IFileService>();
         }
 
         [Test]
@@ -23,7 +26,7 @@ namespace PheasantBench.Tests.Services
             A.CallTo(() => _ForumThreadRepository.ExistsAsync(x => x.Name == "faked")).Returns(false);
             A.CallTo(() => _ForumThreadRepository.InsertAsync(thread)).Returns(true);
 
-            var service = new ForumThreadService(_ForumThreadRepository);
+            var service = new ForumThreadService(_ForumThreadRepository, _FileService);
 
             var result = await service.CreateForumThread(dto);
 
@@ -39,7 +42,7 @@ namespace PheasantBench.Tests.Services
             A.CallTo(() => _ForumThreadRepository.ExistsAsync(x => x.Name == "")).Returns(true);
             A.CallTo(() => _ForumThreadRepository.InsertAsync(thread)).Returns(true);
 
-            var service = new ForumThreadService(_ForumThreadRepository);
+            var service = new ForumThreadService(_ForumThreadRepository, _FileService);
             var result = await service.CreateForumThread(dto);
 
             Assert.AreEqual(result.Success, false);

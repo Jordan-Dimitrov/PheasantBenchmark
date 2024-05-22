@@ -47,10 +47,18 @@ namespace PheasantBench.Web.Controllers
         {
             var response = await _BenchmarkService.GetBenchmarksPaged(page, _Size);
 
+            string success = (string)TempData["Success"];
+
+            ViewBag.Success = success;
+
+            string error = (string)TempData["ErrorMessage"];
+
+            ViewBag.ErrorMessage = error;
+
             if (!response.Success)
             {
-                TempData["ErrorMessage"] = response.ErrorMessage;
-                return RedirectToAction("Error", "ForumMessage");
+                ViewBag.ErrorMessage = response.ErrorMessage;
+                return View();
             }
 
             ViewBag.PageNumber = page;
@@ -82,11 +90,12 @@ namespace PheasantBench.Web.Controllers
 
             if (!response.Success)
             {
-                ViewBag.ErrorMessage = response.ErrorMessage;
-                return RedirectToAction("Remove");
+                TempData["ErrorMessage"] = response.ErrorMessage;
             }
-
-            ViewBag.Success = "Removed successfully";
+            else
+            {
+                TempData["Success"] = "Removed successfully";
+            }
 
             return RedirectToAction("GetBenchmarks");
         }

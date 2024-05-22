@@ -7,6 +7,7 @@
         public string? FileName { get; set; }
         public DateTime DateCreated { get; set; }
         public Guid ForumThreadId { get; set; }
+        public UserDto User { get; set; }
         public long UpvoteCount { get; set; }
     }
 }

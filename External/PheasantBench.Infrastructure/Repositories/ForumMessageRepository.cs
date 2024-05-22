@@ -26,21 +26,26 @@ namespace PheasantBench.Infrastructure.Repositories
 
         public async Task<IEnumerable<ForumMessage>> GetAllAsync(bool trackChanges)
         {
-            var query = _Context.ForumMessages;
+            var query = _Context.ForumMessages.Include(x => x.User)
+;
 
             return await (trackChanges ? query.ToListAsync() : query.AsNoTracking().ToListAsync());
         }
 
         public async Task<ForumMessage?> GetByIdAsync(Guid id, bool trackChanges)
         {
-            var query = _Context.ForumMessages.Where(x => x.Id == id);
+            var query = _Context
+                .ForumMessages
+                .Include(x => x.User)
+                .Where(x => x.Id == id);
 
             return await (trackChanges ? query.FirstOrDefaultAsync() : query.AsNoTracking().FirstOrDefaultAsync());
         }
 
         public async Task<ForumMessage?> GetByAsync(Expression<Func<ForumMessage, bool>> condition)
         {
-            return await _Context.ForumMessages.FirstOrDefaultAsync(condition);
+            return await _Context.ForumMessages
+                .Include(x => x.User).FirstOrDefaultAsync(condition);
         }
 
         public async Task<bool> InsertAsync(ForumMessage value)
@@ -58,7 +63,9 @@ namespace PheasantBench.Infrastructure.Repositories
 
         public async Task<IEnumerable<ForumMessage>> GetPagedAsync(bool trackChanges, int page, int size)
         {
-            var query = _Context.ForumMessages.Skip((page - 1) * size)
+            var query = _Context.ForumMessages
+                .Include(x => x.User)
+                .Skip((page - 1) * size)
                 .Take(size);
 
             return await (trackChanges ? query.ToListAsync() : query.AsNoTracking().ToListAsync());
@@ -67,6 +74,7 @@ namespace PheasantBench.Infrastructure.Repositories
         public async Task<IEnumerable<ForumMessage>> GetPagedByThreadAsync(int page, int size, Guid threadId, bool trackChanges)
         {
             var query = _Context.ForumMessages
+                .Include(x => x.User)
                 .Where(x => x.ForumThreadId == threadId)
                 .Skip((page - 1) * size)
                 .Take(size)
