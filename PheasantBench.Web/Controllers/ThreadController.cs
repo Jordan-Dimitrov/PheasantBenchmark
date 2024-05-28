@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PheasantBench.Application.Abstractions;
 using PheasantBench.Application.Dtos;
+using PheasantBench.Infrastructure;
 
 namespace PheasantBench.Web.Controllers
 {
@@ -34,7 +35,7 @@ namespace PheasantBench.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ViewBag.ErrorMessage = "Invalid input";
+                ViewBag.ErrorMessage = ResponseConstants.InvalidData;
                 return View();
             }
 
@@ -78,7 +79,7 @@ namespace PheasantBench.Web.Controllers
             }
             else
             {
-                TempData["Success"] = "Successfuly deleted";
+                TempData["Success"] = ResponseConstants.RemoveSuccess;
             }
 
             return RedirectToAction("GetThreads");

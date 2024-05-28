@@ -33,14 +33,14 @@ namespace PheasantBench.Infrastructure.Services
             if (user is null)
             {
                 response.Success = false;
-                response.ErrorMessage = "User not found";
+                response.ErrorMessage = ResponseConstants.UserNotFound;
                 return response;
             }
 
             if (thread is null)
             {
                 response.Success = false;
-                response.ErrorMessage = "Thread not found";
+                response.ErrorMessage = ResponseConstants.ThreadNotFound;
                 return response;
             }
 
@@ -68,7 +68,7 @@ namespace PheasantBench.Infrastructure.Services
             if (!await _ForumMessageRepository.InsertAsync(forumMessage))
             {
                 response.Success = false;
-                response.ErrorMessage = "Unexpected error";
+                response.ErrorMessage = ResponseConstants.Unexpected;
             }
 
             return new Response();
@@ -83,7 +83,7 @@ namespace PheasantBench.Infrastructure.Services
             if (benchmark is null)
             {
                 response.Success = false;
-                response.ErrorMessage = "Message not found";
+                response.ErrorMessage = ResponseConstants.MessageNotFound;
                 return response;
             }
 
@@ -100,7 +100,7 @@ namespace PheasantBench.Infrastructure.Services
             if (!await _ForumMessageRepository.DeleteAsync(benchmark))
             {
                 response.Success = false;
-                response.ErrorMessage = "Unexpected error";
+                response.ErrorMessage = ResponseConstants.Unexpected;
             }
 
             response.Data = benchmark.ForumThreadId;
@@ -118,7 +118,7 @@ namespace PheasantBench.Infrastructure.Services
             if (benchmark is null)
             {
                 response.Success = false;
-                response.ErrorMessage = "No such forum message";
+                response.ErrorMessage = ResponseConstants.MessageNotFound;
                 return response;
             }
 
@@ -146,7 +146,7 @@ namespace PheasantBench.Infrastructure.Services
             if (benchmark is null)
             {
                 response.Success = false;
-                response.ErrorMessage = "No such forum mesasges";
+                response.ErrorMessage = ResponseConstants.MessageNotFound;
                 return response;
             }
 
@@ -177,7 +177,7 @@ namespace PheasantBench.Infrastructure.Services
             if (benchmark is null)
             {
                 response.Success = false;
-                response.ErrorMessage = "No such forum mesasges";
+                response.ErrorMessage = ResponseConstants.MessageNotFound;
                 return response;
             }
 

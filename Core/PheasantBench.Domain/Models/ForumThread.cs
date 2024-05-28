@@ -12,9 +12,9 @@ namespace PheasantBench.Domain.Models
         [Key]
         public Guid Id { get; set; }
         [Required]
-        [MaxLength(16)]
+        [MaxLength(Constants.NameSize)]
         public string Name { get; set; } = null!;
-        [MaxLength(64)]
+        [MaxLength(Constants.DescriptionSize)]
         public string Description { get; set; } = null!;
         public ICollection<ForumMessage> ForumMessages { get; set; }
     }

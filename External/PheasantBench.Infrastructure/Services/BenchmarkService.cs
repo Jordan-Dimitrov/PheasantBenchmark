@@ -29,7 +29,7 @@ namespace PheasantBench.Infrastructure.Services
             if (user is null)
             {
                 response.Success = false;
-                response.ErrorMessage = "User not found";
+                response.ErrorMessage = ResponseConstants.UserNotFound;
                 return response;
             }
 
@@ -47,7 +47,7 @@ namespace PheasantBench.Infrastructure.Services
             if (!await _BenchmarkRepository.InsertAsync(benchmark))
             {
                 response.Success = false;
-                response.ErrorMessage = "Unexpected error";
+                response.ErrorMessage = ResponseConstants.Unexpected;
             }
 
             return new Response();
@@ -62,14 +62,14 @@ namespace PheasantBench.Infrastructure.Services
             if (benchmark is null)
             {
                 response.Success = false;
-                response.ErrorMessage = "Benchmark not found";
+                response.ErrorMessage = ResponseConstants.BenchmarkNotFound;
                 return response;
             }
 
             if (!await _BenchmarkRepository.DeleteAsync(benchmark))
             {
                 response.Success = false;
-                response.ErrorMessage = "Unexpected error";
+                response.ErrorMessage = ResponseConstants.Unexpected;
             }
 
             return response;
@@ -84,7 +84,7 @@ namespace PheasantBench.Infrastructure.Services
             if (benchmark is null)
             {
                 response.Success = false;
-                response.ErrorMessage = "No such benchmark";
+                response.ErrorMessage = ResponseConstants.BenchmarkNotFound;
                 return response;
             }
 
@@ -116,7 +116,7 @@ namespace PheasantBench.Infrastructure.Services
             if (!benchmark.Any())
             {
                 response.Success = false;
-                response.ErrorMessage = "No such benchmarks";
+                response.ErrorMessage = ResponseConstants.BenchmarkNotFound;
                 return response;
             }
 

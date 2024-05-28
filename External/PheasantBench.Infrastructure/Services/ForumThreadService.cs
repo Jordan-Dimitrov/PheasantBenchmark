@@ -25,7 +25,7 @@ namespace PheasantBench.Infrastructure.Services
             if (await _ForumThreadRepository.ExistsAsync(x => x.Name == benchmark.Name))
             {
                 response.Success = false;
-                response.ErrorMessage = "Forum thread already exists";
+                response.ErrorMessage = ResponseConstants.ThreadExists;
                 return response;
             }
 
@@ -38,7 +38,7 @@ namespace PheasantBench.Infrastructure.Services
             if (!await _ForumThreadRepository.InsertAsync(forumThread))
             {
                 response.Success = false;
-                response.ErrorMessage = "Unexpected error";
+                response.ErrorMessage = ResponseConstants.Unexpected;
             }
 
             return response;
@@ -53,7 +53,7 @@ namespace PheasantBench.Infrastructure.Services
             if (benchmark is null)
             {
                 response.Success = false;
-                response.ErrorMessage = "Forum thread not found";
+                response.ErrorMessage = ResponseConstants.ThreadNotFound;
                 return response;
             }
 
@@ -62,7 +62,7 @@ namespace PheasantBench.Infrastructure.Services
             if (!await _ForumThreadRepository.DeleteAsync(benchmark))
             {
                 response.Success = false;
-                response.ErrorMessage = "Unexpected error";
+                response.ErrorMessage = ResponseConstants.Unexpected;
             }
 
             foreach (var item in paths)
@@ -85,7 +85,7 @@ namespace PheasantBench.Infrastructure.Services
             if (benchmark is null)
             {
                 response.Success = false;
-                response.ErrorMessage = "No such forum thread";
+                response.ErrorMessage = ResponseConstants.ThreadNotFound;
                 return response;
             }
 
@@ -109,7 +109,7 @@ namespace PheasantBench.Infrastructure.Services
             if (!benchmark.Any())
             {
                 response.Success = false;
-                response.ErrorMessage = "No such threads";
+                response.ErrorMessage = ResponseConstants.ThreadNotFound;
                 return response;
             }
 

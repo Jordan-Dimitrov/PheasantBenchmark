@@ -35,13 +35,13 @@ namespace PheasantBench.Infrastructure.Services
 
             if (user is null)
             {
-                response.ErrorMessage = "Invalid user";
+                response.ErrorMessage = ResponseConstants.UserNotFound;
                 return response;
             }
 
             if (forumMessage is null)
             {
-                response.ErrorMessage = "Invalid message";
+                response.ErrorMessage = ResponseConstants.MessageNotFound;
                 return response;
             }
 
@@ -58,7 +58,7 @@ namespace PheasantBench.Infrastructure.Services
 
                 if (!await _UserUpvoteRepository.InsertAsync(upvoteToAdd))
                 {
-                    response.ErrorMessage = "Unexpected error";
+                    response.ErrorMessage = ResponseConstants.Unexpected;
                     return response;
                 }
 
@@ -81,7 +81,7 @@ namespace PheasantBench.Infrastructure.Services
             if (!await _UserUpvoteRepository.UpdateAsync(upvote)
                 || !await _ForumMessageRepository.UpdateAsync(forumMessage))
             {
-                response.ErrorMessage = "Unexpected error";
+                response.ErrorMessage = ResponseConstants.Unexpected;
                 return response;
             }
 

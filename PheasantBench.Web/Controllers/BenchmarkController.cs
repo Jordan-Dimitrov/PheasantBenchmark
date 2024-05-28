@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PheasantBench.Application.Abstractions;
+using PheasantBench.Infrastructure;
 
 namespace PheasantBench.Web.Controllers
 {
@@ -94,7 +95,7 @@ namespace PheasantBench.Web.Controllers
             }
             else
             {
-                TempData["Success"] = "Removed successfully";
+                TempData["Success"] = ResponseConstants.RemoveSuccess;
             }
 
             return RedirectToAction("GetBenchmarks");

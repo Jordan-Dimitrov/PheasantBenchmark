@@ -15,9 +15,9 @@ namespace PheasantBench.Domain.Models
         public Guid Id { get; set; }
 
         [Required]
-        [MaxLength(1024)]
+        [MaxLength(Constants.MessageSize)]
         public string MessageContent { get; set; }
-        [MaxLength(1024)]
+        [MaxLength(Constants.MessageSize)]
         public string? FileName { get; set; }
         [Required]
         public DateTime DateCreated { get; set; }

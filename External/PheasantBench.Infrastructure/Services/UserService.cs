@@ -22,14 +22,14 @@ namespace PheasantBench.Infrastructure.Services
             if (user is null)
             {
                 response.Success = false;
-                response.ErrorMessage = "No such user";
+                response.ErrorMessage = ResponseConstants.UserNotFound;
                 return response;
             }
 
             if (!await _UserRepository.DeleteAsync(user))
             {
                 response.Success = false;
-                response.ErrorMessage = "Unexpected error";
+                response.ErrorMessage = ResponseConstants.Unexpected;
                 return response;
             }
 
@@ -45,7 +45,7 @@ namespace PheasantBench.Infrastructure.Services
             if (user is null)
             {
                 response.Success = false;
-                response.ErrorMessage = "No such user";
+                response.ErrorMessage = ResponseConstants.UserNotFound;
                 return response;
             }
 
@@ -66,7 +66,7 @@ namespace PheasantBench.Infrastructure.Services
             if (!users.Any())
             {
                 response.Success = false;
-                response.ErrorMessage = "No such users";
+                response.ErrorMessage = ResponseConstants.UserNotFound;
                 return response;
             }
 

@@ -1,19 +1,24 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using PheasantBench.Domain;
+using System.ComponentModel.DataAnnotations;
 
 namespace PheasantBench.Application.Dtos
 {
     public class CreateBenchmarkDto
     {
-        [MaxLength(255)]
+        [MinLength(Constants.NameSize)]
+        [MaxLength(Constants.HardwareInfoSize)]
         [Required]
         public string ProcessorName { get; set; } = null!;
-        [MaxLength(255)]
+        [MinLength(Constants.NameSize)]
+        [MaxLength(Constants.HardwareInfoSize)]
         [Required]
         public string Architecture { get; set; } = null!;
-        [MaxLength(255)]
+        [MinLength(Constants.NameSize)]
+        [MaxLength(Constants.HardwareInfoSize)]
         [Required]
         public string MachineName { get; set; } = null!;
-        [MaxLength(255)]
+        [MinLength(Constants.NameSize)]
+        [MaxLength(Constants.HardwareInfoSize)]
         [Required]
         public string OsVersion { get; set; } = null!;
         [Required]

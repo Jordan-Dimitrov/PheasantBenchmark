@@ -52,7 +52,7 @@ namespace PheasantBench.Infrastructure.Services
 
             DataResponse<FileContentResult> response = new DataResponse<FileContentResult>();
             response.Success = false;
-            response.ErrorMessage = "Invalid path";
+            response.ErrorMessage = ResponseConstants.InvalidPath;
 
             try
             {
@@ -80,7 +80,7 @@ namespace PheasantBench.Infrastructure.Services
         {
             Response response = new Response();
             response.Success = false;
-            response.ErrorMessage = "Invalid path";
+            response.ErrorMessage = ResponseConstants.InvalidPath;
 
             string filePath = Path.Combine(_UploadsDirectory, filename);
 
@@ -100,7 +100,7 @@ namespace PheasantBench.Infrastructure.Services
         {
             DataResponse<string> response = new DataResponse<string>();
             response.Success = false;
-            response.ErrorMessage = "Invalid path";
+            response.ErrorMessage = ResponseConstants.InvalidPath;
 
             string fileName = Path.GetFileName(file.FileName);
             string fileExtension = Path.GetExtension(fileName).ToLowerInvariant();
@@ -140,7 +140,7 @@ namespace PheasantBench.Infrastructure.Services
             var response = new DataResponse<FileContentResult>
             {
                 Success = false,
-                ErrorMessage = "Invalid path"
+                ErrorMessage = ResponseConstants.InvalidPath
             };
 
             try

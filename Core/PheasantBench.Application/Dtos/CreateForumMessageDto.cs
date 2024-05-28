@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using PheasantBench.Domain;
 using System.ComponentModel.DataAnnotations;
 
 namespace PheasantBench.Application.Dtos
@@ -6,7 +7,8 @@ namespace PheasantBench.Application.Dtos
     public class CreateForumMessageDto
     {
         [Required]
-        [MaxLength(1024)]
+        [MinLength(Constants.NameSize)]
+        [MaxLength(Constants.MessageSize)]
         public string MessageContent { get; set; }
         [Required]
         public Guid ForumThreadId { get; set; }

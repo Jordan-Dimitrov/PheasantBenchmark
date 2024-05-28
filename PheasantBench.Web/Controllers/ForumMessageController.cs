@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PheasantBench.Application.Abstractions;
 using PheasantBench.Application.Dtos;
+using PheasantBench.Infrastructure;
 
 namespace PheasantBench.Web.Controllers
 {
@@ -20,10 +21,6 @@ namespace PheasantBench.Web.Controllers
             _ForumMessageService = forumMessageService;
             _ForumThreadService = forumThreadService;
             _UserUpvoteService = userUpvoteService;
-        }
-        public IActionResult Index()
-        {
-            return View();
         }
 
         [HttpGet]
@@ -48,7 +45,7 @@ namespace PheasantBench.Web.Controllers
             }
             else
             {
-                TempData["Success"] = "Upvoted message successfully";
+                TempData["Success"] = ResponseConstants.UpvoteSuccess;
             }
 
             return RedirectToAction("GetMessages", new { forumPage = 1, threadId = response.Data });
@@ -82,7 +79,7 @@ namespace PheasantBench.Web.Controllers
             }
             else
             {
-                TempData["Success"] = "Successfuly deleted";
+                TempData["Success"] = ResponseConstants.RemoveSuccess;
             }
 
             return RedirectToAction("GetMessages", new { forumPage = 1, threadId = response.Data });
@@ -136,7 +133,7 @@ namespace PheasantBench.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                TempData["ErrorMessage"] = "Invalid data";
+                TempData["ErrorMessage"] = ResponseConstants.InvalidData;
                 return RedirectToAction("GetMessages", new { forumPage = 1, threadId = dto.ForumThreadId });
             }
 
@@ -148,7 +145,7 @@ namespace PheasantBench.Web.Controllers
             }
             else
             {
-                TempData["Success"] = "Successfuly created";
+                TempData["Success"] = ResponseConstants.CreateSuccess;
             }
 
             return RedirectToAction("GetMessages", new { forumPage = 1, threadId = dto.ForumThreadId });

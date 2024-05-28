@@ -1,4 +1,5 @@
-﻿@model PheasantBench.Application.ViewModels.BencmarksPagedDto
+﻿@using PheasantBench.Domain.Enums
+@model PheasantBench.Application.ViewModels.BencmarksPagedDto
 
 <h1>Benchmarks</h1>
 
@@ -26,7 +27,7 @@
             <th>OS</th>
             <th>Date</th>
             <th>User</th>
-            @if (User.IsInRole("Admin"))
+            @if (User.IsInRole(Role.Admin.ToString()))
             {
                 <th>Actions</th>
             }
@@ -43,7 +44,7 @@
                 <td>@item.OsVersion</td>
                 <td>@item.DateCreated</td>
                 <td>@item.User.Name</td>
-                @if (User.IsInRole("Admin"))
+                @if (User.IsInRole(Role.Admin.ToString()))
                 {
                     <td>
                         <form method="get" asp-controller="Benchmark" asp-action="Remove">

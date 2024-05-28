@@ -54,6 +54,8 @@ namespace PheasantBench.Web
                 app.UseHsts();
             }
 
+            app.UseStatusCodePagesWithRedirects("Home/Error?statuscode={0}");
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

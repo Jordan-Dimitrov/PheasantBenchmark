@@ -1,13 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using PheasantBench.Domain;
+using System.ComponentModel.DataAnnotations;
 
 namespace PheasantBench.Application.Dtos
 {
     public class CreateForumThreadDto
     {
         [Required]
-        [MaxLength(16)]
+        [MinLength(Constants.NameMinSize)]
+        [MaxLength(Constants.NameSize)]
         public string Name { get; set; } = null!;
-        [MaxLength(64)]
+        [MinLength(Constants.NameMinSize)]
+        [MaxLength(Constants.DescriptionSize)]
         public string Description { get; set; } = null!;
     }
 }

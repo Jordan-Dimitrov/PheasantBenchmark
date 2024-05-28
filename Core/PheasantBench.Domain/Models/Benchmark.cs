@@ -12,16 +12,16 @@ namespace PheasantBench.Domain.Models
         [Key]
         public Guid Id { get; set; }
 
-        [MaxLength(255)]
+        [MaxLength(Constants.HardwareInfoSize)]
         [Required]
         public string ProcessorName { get; set; } = null!;
-        [MaxLength(255)]
+        [MaxLength(Constants.HardwareInfoSize)]
         [Required]
         public string Architecture { get; set; } = null!;
-        [MaxLength(255)]
+        [MaxLength(Constants.HardwareInfoSize)]
         [Required]
         public string MachineName { get; set; } = null!;
-        [MaxLength(255)]
+        [MaxLength(Constants.HardwareInfoSize)]
         [Required]
         public string OsVersion { get; set; } = null!;
         [Required]
