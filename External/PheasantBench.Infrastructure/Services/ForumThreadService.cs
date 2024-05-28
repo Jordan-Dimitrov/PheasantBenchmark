@@ -67,7 +67,10 @@ namespace PheasantBench.Infrastructure.Services
 
             foreach (var item in paths)
             {
-                await _FileService.RemoveAsync(item);
+                if (item is not null)
+                {
+                    await _FileService.RemoveAsync(item);
+                }
             }
 
             return response;

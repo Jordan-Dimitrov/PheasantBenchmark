@@ -51,7 +51,7 @@ namespace PheasantBench.Web.Controllers
                 TempData["Success"] = "Upvoted message successfully";
             }
 
-            return RedirectToAction("GetMessages", new { page = 1, threadId = response.Data });
+            return RedirectToAction("GetMessages", new { forumPage = 1, threadId = response.Data });
         }
 
         [HttpGet]
@@ -85,7 +85,7 @@ namespace PheasantBench.Web.Controllers
                 TempData["Success"] = "Successfuly deleted";
             }
 
-            return RedirectToAction("GetMessages", new { page = 1, threadId = response.Data });
+            return RedirectToAction("GetMessages", new { forumPage = 1, threadId = response.Data });
         }
 
         public IActionResult Error()
@@ -99,9 +99,9 @@ namespace PheasantBench.Web.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> GetMessages([FromQuery] int page, [FromQuery] Guid threadId)
+        public async Task<IActionResult> GetMessages([FromQuery] Guid threadId, [FromQuery] int forumPage = 1)
         {
-            var response = await _ForumMessageService.GetForumMessagesPagedByThread(page, _Size, threadId);
+            var response = await _ForumMessageService.GetForumMessagesPagedByThread(forumPage, _Size, threadId);
             var thread = await _ForumThreadService.GetForumThread(threadId);
 
             if (!thread.Success)
@@ -124,7 +124,7 @@ namespace PheasantBench.Web.Controllers
 
             ViewBag.ErrorMessage = error;
 
-            response.Data.PageNumber = page;
+            response.Data.PageNumber = forumPage;
             response.Data.Thread = thread.Data;
 
             return View(response.Data);
@@ -137,7 +137,7 @@ namespace PheasantBench.Web.Controllers
             if (!ModelState.IsValid)
             {
                 TempData["ErrorMessage"] = "Invalid data";
-                return RedirectToAction("GetMessages", new { page = 1, threadId = dto.ForumThreadId });
+                return RedirectToAction("GetMessages", new { forumPage = 1, threadId = dto.ForumThreadId });
             }
 
             var response = await _ForumMessageService.CreateForumMessage(dto, User.Identity.GetUserId());
@@ -151,7 +151,7 @@ namespace PheasantBench.Web.Controllers
                 TempData["Success"] = "Successfuly created";
             }
 
-            return RedirectToAction("GetMessages", new { page = 1, threadId = dto.ForumThreadId });
+            return RedirectToAction("GetMessages", new { forumPage = 1, threadId = dto.ForumThreadId });
         }
 
     }
